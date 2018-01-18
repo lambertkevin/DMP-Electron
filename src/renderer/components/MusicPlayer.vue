@@ -133,18 +133,36 @@
    */
   .music-player {
 
-    .plyr--audio .plyr__controls{
-      background: none;
-      border: none;
-    }
+    .plyr{
+      
+      &__time{
+        color: smart-scale($black, -20%);
+      }
 
-    .plyr__progress--played, .plyr__volume--display{
-      color: $blue;
-      overflow: hidden;
-    }
+      &--audio{
+        background: none;
+        border: none;
 
-    .plyr--audio .plyr__controls button.tab-focus:focus, .plyr--audio .plyr__controls button:hover{
-      background: $blue;
+        .plyr__controls{
+          background: none;
+          border: none;
+
+          button{
+            color: smart-scale($black, -20%);
+
+            &.tab-focus:focus, &:hover{
+              background: $blue;
+            }
+          }
+        }
+      }
+
+      &__progress, &__volume{
+        &--played, &--display{
+          color: $blue;
+          overflow: hidden;
+        }
+      }
     }
     
     /**
