@@ -1,0 +1,260 @@
+<template>
+  <div class="settings">
+    <span
+      class="settings__text"
+      :class="{
+        'settings__text--show': isHover
+      }"
+    >
+      {{ text }}
+    </span>
+    <span
+      v-if="!isOpen"
+      @click="isOpen = true"
+      @mouseenter="isHover = true"
+      @mouseleave="isHover = false"
+      uk-icon="icon: cog; ratio: 0.7"
+    ></span>
+    <span
+      v-if="isOpen"
+      @click="isOpen = false"
+      @mouseenter="isHover = true"
+      @mouseleave="isHover = false"
+      uk-icon="icon: close; ratio: 0.7"
+    >
+    </span>
+    <div
+      class="settings__panel box-shadow"
+      :class="{
+        'settings__panel--open': isOpen
+      }"
+    >
+      <div class="settings__panel__content">
+        <div>
+          <span
+            class="button"
+            @click="reset"
+          >
+            <span uk-icon="icon: history; ratio: 0.5"></span>
+            <span class="button__text">
+              Reset rounds
+            </span>
+          </span>
+        </div>
+        <div>
+          <span
+            class="button"
+            @click="generate"
+          >
+            <span uk-icon="icon: refresh; ratio: 0.5"></span>
+            <span class="button__text">
+              Regenerate timetable
+            </span>
+          </span>
+        </div>
+        <div>
+          <span
+            class="button"
+            @click="checkForUnkownSongs"
+          >
+            <span uk-icon="icon: pencil; ratio: 0.5"></span>
+            <span class="button__text">
+              Check for unknown songs
+            </span>
+          </span>
+        </div>
+        <div>
+          <span
+            class="button"
+            @click="createFolders"
+          >
+            <span uk-icon="icon: folder; ratio: 0.5"></span>
+            <span class="button__text">
+              Create folders
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'Settings',
+
+    computed: {
+      text() {
+        return this.isOpen ? 'close' : 'settings';
+      },
+
+      isOpen: {
+        get() {
+          return this.$store.state.settings.isOpen;
+        },
+        set(val) {
+          this.$store.commit('settings/setIsOpen', val);
+        }
+      },
+
+      isHover: {
+        get() {
+          return this.$store.state.settings.isHover;
+        },
+        set(val) {
+          this.$store.commit('settings/setIsHover', val);
+        }
+      }
+    },
+
+    methods: {
+      toggleSettings() {
+        this.isOpen = !this.isOpen;
+      },
+
+      reset() {
+        this.$store.dispatch('timetable/getTimetable');
+        this.toggleSettings();
+        this.$store.commit('musicPlayer/setDance', {});
+        this.$store.commit('musicPlayer/setIsPlaying', false);
+      },
+
+      generate() {
+        this.$store.commit('timetable/clearRounds');
+        this.$store.dispatch('timetable/generateTimetable');
+        this.toggleSettings();
+        this.$store.commit('musicPlayer/setDance', {});
+        this.$store.commit('musicPlayer/setIsPlaying', false);
+      },
+
+      checkForUnkownSongs() {
+        const unknownSongs = this.$store.getters['timetable/getUnknownSongs'];
+        this.$store.commit('settings/setIsLookingForUnknownSongs', unknownSongs.length > 1);
+        this.$store.commit('timetable/setUnknownSongs', unknownSongs);
+        this.toggleSettings();
+      },
+
+      createFolders() {
+        fetch('http://localhost:3000/folders')
+          .then((res) => {
+            if (res.status) {
+              console.log('Folder created');
+            }
+            this.toggleSettings();
+          }).catch((err) => {
+            console.error(err);
+            this.toggleSettings();
+          });
+      }
+    },
+
+
+    /**
+     * Lifecyle
+     *
+     * @return {void}
+     */
+    mounted() {
+      const $ = require('jquery');
+      $(this.$el).foundation();
+    },
+
+
+    /**
+     * Lifecyle
+     *
+     * @return {void}
+     */
+    destroyed() {
+      const $ = require('jquery');
+      if (this.$el && this.$el.foundation) {
+        $(this.$el).foundation('destroy');
+      }
+    }
+  };
+</script>
+
+<style lang="scss">
+
+  /**
+   * SMALL
+   */
+  .settings {
+    $class: &;
+    position: fixed;
+    top: rem-calc(20);
+    right: rem-calc(20);
+    z-index: 5;
+
+    [uk-icon]{
+      cursor: pointer;
+    }
+
+    &__text{
+      font-family: $nexa;
+      display: inline-block;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: rem-calc(8);
+      letter-spacing: rem-calc(2);
+      vertical-align: middle;
+      opacity: 0;
+      transform: translateX(10px);
+      transition: all 0.3s ease;
+
+      &--show{
+        opacity: 1!important;
+        transform: translateX(0)!important;
+      }
+    }
+
+    &__panel {
+      position: absolute;
+      background: $white;
+      top: -4px;
+      right: -4px;
+      z-index: -1;
+      width: rem-calc(230);
+      padding: rem-calc(24);
+      transform: scale(0);
+      transform-origin: top right;
+      transition: all 0.3s ease;
+
+      &--open{
+        transform: scale(1);
+      }
+
+      &__content{
+        > div {
+          &:last-child{
+            .button{
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+
+      .button{
+        width: 100%;
+      }
+    }
+
+    /**
+     * MEDIUM UP
+     */
+    @include breakpoint(medium) {
+    }
+
+    /**
+     * LARGE UP
+     */
+    @include breakpoint(large) {
+    }
+
+    /**
+     * XLARGE UP
+     */
+    @include breakpoint(xlarge) {
+    }
+  }
+</style>

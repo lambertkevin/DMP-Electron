@@ -1,0 +1,158 @@
+.button{
+  font-family: $nexa;
+  font-size: rem-calc(8);
+  padding: rem-calc(7 5);
+  background: none;
+  color: $black;
+  white-space: nowrap;
+  text-align: left;
+  border: 1px solid $light-gray;
+  text-transform: uppercase;
+  letter-spacing: rem-calc(1);
+
+  &:hover{
+    background: $light-gray;
+  }
+
+  [uk-icon]{
+    vertical-align: middle;
+    margin-right: rem-calc(4);
+  }
+
+  &__text{
+    vertical-align: middle;
+  }
+}
+
+/**
+* Healines
+*/
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6 {
+  letter-spacing: 0.08rem;
+}
+
+
+/**
+* Colors
+*/
+.black{
+  color: $black;
+}
+
+.light-gray{
+  color: $light-gray;
+}
+
+.medium-gray{
+  color: $medium-gray;
+}
+
+.dark-gray{
+  color: $dark-gray;
+}
+
+.yellow{
+  color: $yellow;
+}
+
+.orange{
+  color: $orange;
+}
+
+.red{
+  color: $red;
+}
+
+.green{
+  color: $green;
+}
+
+.turquoise{
+  color: $turquoise;
+}
+
+.blue{
+  color: $blue;
+}
+
+
+/**
+* Gradients
+*/
+.text-gradient{
+  &--yellorange{
+    background-image: linear-gradient(to right, $yellow 40%, $orange 100%);
+    color:transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+  }
+}
+
+.bg-gradient{
+  &--whitegrey{
+    background-image: linear-gradient(to bottom, rgb(247,250,252) 0%, rgb(252,254,255) 100%);
+  }
+}
+
+
+/**
+* Boxes
+*/
+.box{
+  background: white;
+  border-radius: rem-calc(5);
+}
+
+.box-shadow{
+  box-shadow: rem-calc(0 4 12 0) rgba(0, 0, 0, 0.03);
+
+  &--hover{
+    box-shadow: rem-calc(0 7 13 0) rgba(0, 0, 0, 0.05);
+  }
+}
+
+
+
+.label{
+    font-family: $bentonSans;
+    font-size: rem-calc(7);
+    font-weight: 700;
+    letter-spacing: 0.11rem;
+    text-transform: uppercase;
+    color: $labelColor;
+}
+  
+
+/**
+* Decoration
+*/
+.gradient-top-bar{  
+    &:before{
+        content: '';
+        position: absolute;
+        z-index: 10;
+        top:0;
+        left: 0;
+        width: 100%;
+        height: rem-calc(2);
+        background-image: linear-gradient(to right, $orange 0%, $yellow 100%);
+    }
+}
+
+
+/**
+* HTML & Body style
+*/
+html, body{
+    height: 100vh;
+    width: 100vw;
+    font-size: 16px;
+    background: $grey-background;
+    background: linear-gradient(to bottom, $white-background 0%, $grey-background 100%);
+}
+  

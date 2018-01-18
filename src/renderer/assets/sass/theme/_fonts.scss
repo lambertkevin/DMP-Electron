@@ -1,0 +1,41 @@
+@mixin font($name, $file, $weight, $style) {
+	$url: '/static/fonts/';
+	@font-face {
+	  font-family: $name;
+	  src:
+	    url($url + $name + '/' + $file +'.eot?#iefix') format('embedded-opentype'),
+	    url($url + $name + '/' + $file +'.woff') format('woff'),
+	    url($url + $name + '/' + $file +'.ttf')  format('truetype');
+	    // url($url + $name + '/' + $file +'.svg#'+ $name) format('svg');
+	  font-weight: $weight;
+	  font-style: $style;
+	}
+}
+
+/**
+ * NeueGRGRotesk
+ */
+ @include font('NeueGRGrotesk', 'NeueGRGroteskLight', 300, 'normal');
+ @include font('NeueGRGrotesk', 'NeueGRGroteskRegular', 'normal', 'normal');
+ @include font('NeueGRGrotesk', 'NeueGRGroteskMedium', 500, 'normal');
+ @include font('NeueGRGrotesk', 'NeueGRGroteskBold', 700, 'normal');
+ @include font('NeueGRGrotesk', 'NeueGRGroteskBlack', 900, 'normal');
+ 
+ /**
+	* BentonSans
+	*/
+ @include font('BentonSans', 'BentonSans-Light', 300, 'normal');
+ @include font('BentonSans', 'BentonSans-Regular', 'normal', 'normal');
+ @include font('BentonSans', 'BentonSans-Medium', 500, 'normal');
+ @include font('BentonSans', 'BentonSans-Bold', 700, 'normal');
+ @include font('BentonSans', 'BentonSans-Black', 900, 'normal');
+ 
+ /**
+	* Nexa
+	*/
+ // @include font('Nexa', 'Nexa-Thin', 100, 'normal');
+ // @include font('Nexa', 'Nexa-Light', 300, 'normal');
+ // @include font('Nexa', 'Nexa-Book', 'normal', 'normal');
+ // @include font('Nexa', 'Nexa-Bold', 700, 'normal');
+ @include font('Nexa', 'Nexa-XBold', 800, 'normal');
+ // @include font('Nexa', 'Nexa-Black', 800, 'normal');

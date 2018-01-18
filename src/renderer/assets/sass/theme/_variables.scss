@@ -1,0 +1,52 @@
+/**
+ * Colors
+ */
+
+ $light-gray: #ebf1f5;
+ $medium-gray: #E3EBEC;
+ $dark-gray: #8a8a8a;
+ $black: #212329;
+ $white: #fff;
+ 
+ $white-background: #f3f5f7;
+ $grey-background: #f0f3f5;
+ 
+ $yellow: #f8be58;
+ $orange: #fb6e49;
+ $red: #f2466f;
+ $green: #48e6ac;
+ $turquoise: #48e6e0;
+ $blue: #3dd4f4;
+ 
+ $labelColor: #c2c2c2;
+ 
+ 
+ /**
+  * Fonts
+  */
+ $icon-font: test;
+ $neueGRGrotesk: NeueGRGrotesk, Arial, 'sans-serif';
+ $bentonSans: BentonSans, Roboto, Helvetica, 'sans-serif';
+ $nexa: Nexa, Roboto, Helvetica, 'sans-serif';
+ 
+ 
+ :export{
+   light-gray: $light-gray;
+   medium-gray: $medium-gray;
+   dark-gray: $dark-gray;
+   black: $black;
+   white: $white;
+   white-background: $white-background;
+   grey-background: $grey-background;
+   yellow: $yellow;
+   orange: $orange;
+   red: $red;
+   green: $green;
+   turquoise: $turquoise;
+   blue: $blue;
+   labelColor: $labelColor;
+   neueGRGrotesk: $neueGRGrotesk;
+   bentonSans: $bentonSans;
+   nexa: $nexa;
+ }
+ 

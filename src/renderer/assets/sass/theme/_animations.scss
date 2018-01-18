@@ -1,0 +1,8 @@
+@-webkit-keyframes blink {
+  0%, 49% {
+    background-color: $white;
+  }
+  50%, 100% {
+    background-color: rgba($red, 0.1);
+  }
+}
