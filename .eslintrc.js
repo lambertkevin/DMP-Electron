@@ -37,7 +37,7 @@ module.exports = {
     "no-param-reassign": ['error', { 
         "props": false
     }],
-    Vue Styleguide
+    // Vue Styleguide
     'vue/no-dupe-keys': 'error',
     'vue/no-duplicate-attributes': 'error',
     'vue/no-reserved-keys': 'error',

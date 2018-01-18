@@ -3,20 +3,29 @@
     <span
       class="settings__text"
       :class="{
+        'settings__text--black': isOpen,
         'settings__text--show': isHover
       }"
     >
       {{ text }}
     </span>
     <span
-      v-if="!isOpen"
-      @click="isOpen = true"
+      v-show="!isOpen"
+      class="settings__icon"
+      :class="{
+        'settings__icon--black': isOpen
+      }"
+      @click="isOpen = !isOpen"
       @mouseenter="isHover = true"
       @mouseleave="isHover = false"
       uk-icon="icon: cog; ratio: 0.7"
     ></span>
     <span
-      v-if="isOpen"
+      v-show="isOpen"
+      class="settings__icon"
+      :class="{
+        'settings__icon--black': isOpen
+      }"
       @click="isOpen = false"
       @mouseenter="isHover = true"
       @mouseleave="isHover = false"
@@ -182,13 +191,9 @@
   .settings {
     $class: &;
     position: fixed;
-    top: rem-calc(20);
-    right: rem-calc(20);
+    top: rem-calc(0);
+    right: rem-calc(10);
     z-index: 5;
-
-    [uk-icon]{
-      cursor: pointer;
-    }
 
     &__text{
       font-family: $nexa;
@@ -200,7 +205,12 @@
       vertical-align: middle;
       opacity: 0;
       transform: translateX(10px);
+      color: $white;
       transition: all 0.3s ease;
+
+      &--black{
+        color: $black;
+      }
 
       &--show{
         opacity: 1!important;
@@ -208,14 +218,30 @@
       }
     }
 
+    &__icon{
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      svg * {
+        stroke: $white!important;
+      }
+
+      &--black{
+        svg * {
+          stroke: $black!important;
+        }
+      }
+    }
+
     &__panel {
       position: absolute;
       background: $white;
-      top: -4px;
-      right: -4px;
+      top: -5px;
+      right: -10px;
       z-index: -1;
-      width: rem-calc(230);
-      padding: rem-calc(24);
+      width: 15.475rem;
+      padding: 2rem;
+      border-bottom-left-radius: 5px;
       transform: scale(0);
       transform-origin: top right;
       transition: all 0.3s ease;

@@ -1,7 +1,7 @@
 <template>
   <div class="playlist-table">
     <div
-      class="playlist-table__container relative box box-shadow"
+      class="playlist-table__container relative"
     >
       <table
         class="grid-container"
@@ -75,6 +75,7 @@
    */
   .playlist-table {
     color: $black;
+    padding-top: rem-calc(18);
 
     &__container{
       overflow: hidden;

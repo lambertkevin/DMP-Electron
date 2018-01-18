@@ -25,7 +25,7 @@
         <span
           class="no-bg"
           v-if="!getLinkTitle(song)"
-        > /
+        > &#10007;
         </span>
       </div>
     </div>
@@ -122,7 +122,7 @@
     &:first-child{
       border-top: none;
     }
-    border-top: 1px dashed $light-gray;
+    border-top: 1px dashed rgba($details, 0.7);
   }
 
   &__song {
@@ -130,7 +130,8 @@
     width: 100%;
 
     > span {
-      border-radius: rem-calc(5);
+      border-radius: rem-calc(3);
+      padding: rem-calc(2);
       transition: all 0.3s ease;
       cursor: pointer;
     }
@@ -140,7 +141,13 @@
 
       &.no-bg{
         background: none!important;
-        color: $black!important;
+        color: smart-scale($black, -15%)!important;
+        font-size: rem-calc(20);
+        transition: all 0.3s ease;
+
+        &:hover{
+          color: smart-scale($black, -30%)!important;
+        }
       }
     }
 
@@ -160,7 +167,7 @@
     }
 
     &:hover {
-      $color: $turquoise;
+      $color: $white;
       > span {
         background: rgba($color, 0.1);
         color: $color;

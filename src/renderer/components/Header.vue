@@ -1,12 +1,12 @@
 <template>
-  <div class="logo text-center">
-    <img src="/static/images/logo.svg" />
+  <div class="header text-center">
+    Championnat Régional 2018
   </div>
 </template>
 
 <script>
   export default {
-    name: 'Logo'
+    name: 'Header'
   };
 </script>
 
@@ -15,13 +15,15 @@
   /**
    * SMALL
    */
-  .logo {
-    color: $black;
-    padding: rem-calc(20 0 30);
-
-    img{
-      max-width: rem-calc(70);
-    }
+  .header {
+    color: rgba($white, 0.75);
+    font-family: $bentonSans;
+    padding: rem-calc(4 0);
+    background: $black;
+    z-index: 2;
+    position: fixed;
+    width: 100vw;
+    font-size: rem-calc(12);
 
     /**
      * MEDIUM UP

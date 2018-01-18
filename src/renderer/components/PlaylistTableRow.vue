@@ -200,12 +200,14 @@
 
     td{
       padding: rem-calc(10 0);
-      border-bottom: 1px solid $medium-gray;
+      border-bottom: 1px solid smart-scale($black, -8%);
+      color: $white;
+      font-weight: 500;
     }
 
     &__time, &__category, &__type, &__round{
       width: 8%;
-      font-weight: bold;
+      font-weight: 500;
       text-align: center;
       background: $black;
       color: $white;
@@ -213,7 +215,7 @@
     }
 
     &__type{
-      box-shadow: 2px 0 5px rgba(0,0,0, 0.05);
+      border-right: 1px solid $details;
     }
 
     &__time{

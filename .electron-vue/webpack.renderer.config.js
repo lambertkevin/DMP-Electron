@@ -76,17 +76,12 @@ const rendererConfig = {
         use: {
           loader: 'vue-loader',
           options: {
+            extractCSS: true,
+            postcss: [
+              require('postcss-cssnext')(),
+              require('precss')()
+            ],
             loaders: {
-              // css: [
-              //   'vue-style-loader', 
-              //   {
-              //     loader: "css-loader",
-              //     options: {
-              //       minimize: false,
-              //       sourceMap: true
-              //     }
-              //   }
-              // ],
               sass: [
                 'vue-style-loader', 
                 {

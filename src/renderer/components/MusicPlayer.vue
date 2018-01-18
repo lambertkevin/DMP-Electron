@@ -10,6 +10,7 @@
 
 <script>
   import { mapState, mapMutations, mapActions } from 'vuex';
+  import plyr from 'plyr';
 
   export default {
     name: 'MusicPlayer',
@@ -36,10 +37,14 @@
 
       playMusic() {
         const audioApi = this.$refs.audioApi;
+        const player = plyr.get('.plyr')[0];
 
         audioApi.pause();
         audioApi.currentTime = 0;
         this.setDanceIsDone(false);
+        if (player.isMuted()) {
+          player.toggleMute();
+        }
         this.setVolume(1);
 
         audioApi.addEventListener('canplay', () =>
@@ -94,6 +99,8 @@
       },
 
       volume() {
+        const player = plyr.get('.plyr')[0];
+        player.setVolume(this.volume * 10);
         this.$refs.audioApi.volume = this.volume;
       },
 
@@ -113,26 +120,33 @@
      */
     mounted() {
       this.setTimeUpdateEvent();
+      plyr.setup();
     },
-
-
-    /**
-     * Lifecyle
-     *
-     * @return {void}
-     */
-    destroyed() {
-    }
   };
 </script>
 
 <style lang="scss">
+  @import "~plyr/src/scss/plyr";
 
   /**
    * SMALL
    */
   .music-player {
 
+    .plyr--audio .plyr__controls{
+      background: none;
+      border: none;
+    }
+
+    .plyr__progress--played, .plyr__volume--display{
+      color: $blue;
+      overflow: hidden;
+    }
+
+    .plyr--audio .plyr__controls button.tab-focus:focus, .plyr--audio .plyr__controls button:hover{
+      background: $blue;
+    }
+    
     /**
      * MEDIUM UP
      */

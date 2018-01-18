@@ -1,17 +1,23 @@
 <template>
   <div class="footer full-width text-center">
-
     <div class="grid-x align-center full-height">
-      <div class="cell small-16 align-self-bottom">
-        <music-player/>
+
+      <div class="cell small-14 medium-10 large-8 align-self-bottom">
+        <div class="grid-x align-center">
+          <div class="cell medium-16 large-13">
+            <music-player></music-player>
+          </div>
+        </div>
       </div>
 
-      <div class="cell small-12 medium-10 large-8 align-self-top">
+      <div class="cell small-16"></div>
+
+      <div class="cell small-14 medium-10 large-8 align-self-top">
         <div class="grid-x">
-          <div class="cell small-8">
+          <div class="cell small-8 footer__element">
             <div class="grid-x align-center">
 
-              <span class="small-16 cell"> Music duration: </span>
+              <span class="small-16 cell footer__element__title"> Music duration: </span>
               <input-number
                 class="small-16 cell"
                 :name="`musicDuration`"
@@ -21,9 +27,11 @@
 
             </div>
           </div>
+
           <div class="cell auto"></div>
-          <div class="cell small-8">
-            <div class="grid-x align-center">
+
+          <div class="cell small-8 footer__element">
+            <div class="grid-x align-center footer__element__title">
 
               <span class="small-16 cell"> Fade duration: </span>
               <input-number
@@ -32,17 +40,17 @@
                 :steps="1"
                 :time="fadeDuration"
                 v-model="fadeDuration"
-              />
+              ></input-number>
 
             </div>
           </div>
+
         </div>
       </div>
     </div>
   </div>
 
 </template>
-
 <script>
   import MusicPlayer from '@/components/MusicPlayer';
   import InputNumber from '@/components/InputNumber';
@@ -113,8 +121,9 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    height: rem-calc(120);
-    background: $black;
+    height: 15vh;
+    border-top: 1px solid smart-scale($black, 2%);
+    background: smart-scale($black, 1%);
     color: $light-gray;
     transform: translateZ(0);
 
@@ -123,6 +132,13 @@
       width: rem-calc(50);
       text-align: center;
       display: inline-block;
+    }
+
+    &__element{
+
+      &__title{
+        font-size: rem-calc(14);
+      }
     }
 
     /**

@@ -16,6 +16,7 @@
         'app__container--blur': areSettingsOpen
       }"
     >
+      <dmp-header></dmp-header>
       <dmp-loading-spinner
         v-if="isLoading"
       ></dmp-loading-spinner>
@@ -34,6 +35,7 @@
   import 'script-loader!what-input';
   import { mapState } from 'vuex';
   import Foundation from 'foundation-sites';
+  import DmpHeader from '@/components/Header';
   import DmpSettings from '@/components/Settings';
   import DmpLoadingSpinner from '@/components/LoadingSpinner';
   import DmpPlaylistTable from '@/components/PlaylistTable';
@@ -45,6 +47,7 @@
 
     components: {
       DmpSettings,
+      DmpHeader,
       DmpLoadingSpinner,
       DmpPlaylistTable,
       DmpModalUnknownSong,
@@ -102,9 +105,13 @@
    * SMALL UP
    */
   #app, .app{
-    height: calc(100% - 120px);
-    padding-bottom: rem-calc(60);
+    height: calc(100% - 15vh);
     overflow: scroll;
+    -webkit-app-region: drag;
+
+    *{
+      user-select: none;
+    }
 
    &__container {
       transition: all 0.5s ease;
