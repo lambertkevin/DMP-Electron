@@ -97,7 +97,7 @@
         },
 
         path(song) {
-          return encodeURIComponent(song.path.replace(this.localPath, '/static/music'))
+        return this.song.path ? `file://${this.song.path}` : null;
         }
       },
 

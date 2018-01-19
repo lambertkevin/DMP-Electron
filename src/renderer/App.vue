@@ -77,13 +77,10 @@
       this.$store.dispatch('settings/getMusicTypes');
   
       fetch('http://localhost:3000/init').then(res => {
-        if (res.status === 200) {
-          console.log('Initial Folder created!');
-          res.text().then(text => {
-          this.$store.commit('settings/setLocalPath', text);
-        })
-        } else {
-          console.error('ERROR MAMENE');
+        if (res.status !== 200) {
+          res.json().then(data => {
+            console.error('ERROR MAMENE', data);
+          });
         }
       })
     },

@@ -5,8 +5,7 @@ export default {
     isLookingForUnknownSongs: false,
     isOpen: false,
     isHover: false,
-    musicTypes: {},
-    localPath: ''
+    musicTypes: {}
   },
 
   mutations: {
@@ -24,10 +23,6 @@ export default {
 
     setMusicTypes(state, payload) {
       state.musicTypes = payload;
-    },
-
-    setLocalPath(state, payload) {
-      state.localPath = payload;
     }
   },
 

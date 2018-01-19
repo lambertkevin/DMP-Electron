@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron' // eslint-disable-line
+import { app, BrowserWindow } from 'electron'; // eslint-disable-line
 
 /**
  * Set `__static` path to static files in production
@@ -26,10 +26,17 @@ function createWindow() {
   });
 
   mainWindow.loadURL(winURL);
-
+  mainWindow.webContents.openDevTools();
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+  const installExtension = require('electron-devtools-installer');
+  installExtension.default(installExtension.VUEJS_DEVTOOLS)
+    .then(() => {})
+    .catch((err) => {
+      console.log('Unable to install `vue-devtools`: \n', err);
+    });
 
   // eslint-disable-next-line
   const server = require('../node/server');

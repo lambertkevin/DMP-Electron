@@ -12,9 +12,6 @@ export default {
       if (!fs.statSync(path.join(musicDir))) {
         mkdirp.sync(path.join(musicDir));
       }
-      if (!fs.statSync(path.join('static', 'music'))) {
-        fs.symlinkSync(path.join(musicDir), path.join('static', 'music'));
-      }
       return {
         code: 200,
         text: path.join(musicDir)
@@ -22,7 +19,7 @@ export default {
     } catch (err) {
       return {
         code: 404,
-        text: 'Error'
+        text: err
       };
     }
   },
@@ -33,7 +30,7 @@ export default {
 
     parsedTiming.forEach((row) => {
       if (row && this.getFolderName(row)) {
-        const folderName = this.getFolderName(row).replace(/\//g, '\\');
+        const folderName = this.getFolderName(row).replace(/\//g, '|');
         mkdirp.sync(path.join(musicDir, folderName));
       }
     });

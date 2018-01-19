@@ -29,7 +29,7 @@
       ]),
 
       path() {
-        return this.dance.path ? encodeURIComponent(this.dance.path.replace(this.localPath, '/static/music')) : null;
+        return this.dance.path ? `file://${this.dance.path}` : null;
       }
     },
 

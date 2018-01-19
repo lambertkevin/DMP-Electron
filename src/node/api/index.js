@@ -50,8 +50,13 @@ const plugin = {
         method: 'GET',
         path: '/init',
         handler: (request, h) => {
-          const createInitialFolder = timingManager.createInitialFolder();
-          return h.response(createInitialFolder.text).code(createInitialFolder.code);
+          try {
+            const createInitialFolder = timingManager.createInitialFolder();
+            return h.response(createInitialFolder.text).code(createInitialFolder.code);
+          } catch (err) {
+            console.error(err);
+            return h.response(err).code(400);
+          }
         }
       },
       {

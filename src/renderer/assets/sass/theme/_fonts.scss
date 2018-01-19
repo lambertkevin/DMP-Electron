@@ -1,5 +1,5 @@
 @mixin font($name, $file, $weight, $style) {
-	$url: '/static/fonts/';
+	$url: '~@/assets/fonts/';
 	@font-face {
 	  font-family: $name;
 	  src:
