@@ -121,7 +121,7 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    height: 15vh;
+    height: rem-calc(110);
     border-top: 1px solid smart-scale($black, 2%);
     background: smart-scale($black, 1%);
     color: $light-gray;

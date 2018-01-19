@@ -5,11 +5,8 @@
     >
       <table
         class="grid-container"
-        data-equalizer
-        data-options="equalizeOnStack: true;"
       >
         <playlist-table-row
-          data-equalizer-watch
           v-for="(row, index) in rounds"
           :key="index"
           :row="row"

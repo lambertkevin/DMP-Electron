@@ -37,7 +37,7 @@
                 <div class="grid-x align-center full-height">
                   <div class="modal-unknown-song__player cell small-16">
                     <audio
-                      :src="song.path"
+                      :src="path(song)"
                       controls
                     ></audio>
                   </div>
@@ -69,9 +69,14 @@
       },
 
       computed: {
+    
         ...mapState('timetable', {
           songs: state => state.unknownSongs
         }),
+    
+        ...mapState('settings', [
+          'localPath'
+        ]),
 
         isOpen: {
           get() {
@@ -89,6 +94,10 @@
           const unknownSongs = this.$store.getters['timetable/getUnknownSongs'];
           this.$store.commit('settings/setIsLookingForUnknownSongs', true);
           this.$store.commit('timetable/setUnknownSongs', unknownSongs);
+        },
+
+        path(song) {
+          return encodeURIComponent(song.path.replace(this.localPath, '/static/music'))
         }
       },
 

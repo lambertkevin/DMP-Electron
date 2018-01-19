@@ -181,14 +181,14 @@
     }
 
     &--done {
-
+      $color: smart-scale($details, -50%);
       > span {
-        background: $light-gray;
-        color: $labelColor;
+        background: rgba($color, 0.3);
+        color: $color;
 
         svg {
           >* {
-            stroke: $labelColor;
+            stroke: $color;
           }
         }
       }

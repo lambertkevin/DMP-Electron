@@ -2,7 +2,7 @@
   <div class="music-player">
     <audio
       ref="audioApi"
-      :src="dance.path"
+      :src="path"
       controls
     />
   </div>
@@ -22,7 +22,15 @@
         'volume',
         'musicDuration',
         'fadeDuration'
-      ])
+      ]),
+
+      ...mapState('settings', [
+        'localPath'
+      ]),
+
+      path() {
+        return this.dance.path ? encodeURIComponent(this.dance.path.replace(this.localPath, '/static/music')) : null;
+      }
     },
 
     methods: {
@@ -120,7 +128,7 @@
      */
     mounted() {
       this.setTimeUpdateEvent();
-      plyr.setup();
+      plyr.setup(this.$refs.audioApi);
     },
   };
 </script>
@@ -134,6 +142,7 @@
   .music-player {
 
     .plyr{
+      $notBlackColor: $turquoise;
       
       &__time{
         color: smart-scale($black, -20%);
@@ -143,15 +152,23 @@
         background: none;
         border: none;
 
-        .plyr__controls{
-          background: none;
-          border: none;
+        .plyr{
+          &__controls{
+            background: none;
+            border: none;
 
-          button{
-            color: smart-scale($black, -20%);
+            button{
+              color: smart-scale($black, -20%);
 
-            &.tab-focus:focus, &:hover{
-              background: $blue;
+              &.tab-focus:focus, &:hover{
+                background: $notBlackColor;
+              }
+            }
+          }
+
+          &__progress{
+            &--buffer{
+              background: smart-scale($details, -40%);
             }
           }
         }
@@ -159,7 +176,7 @@
 
       &__progress, &__volume{
         &--played, &--display{
-          color: $blue;
+          color: $notBlackColor;
           overflow: hidden;
         }
       }

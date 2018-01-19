@@ -18,10 +18,11 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 563,
+    height: 600,
     useContentSize: true,
-    width: 1000,
-    titleBarStyle: 'hidden'
+    width: 1200,
+    titleBarStyle: 'hidden',
+    backgroundColor: '#292D3E'
   });
 
   mainWindow.loadURL(winURL);
@@ -29,6 +30,9 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+  // eslint-disable-next-line
+  const server = require('../node/server');
 }
 
 app.on('ready', createWindow);

@@ -75,6 +75,17 @@
 
     beforeCreate() {
       this.$store.dispatch('settings/getMusicTypes');
+  
+      fetch('http://localhost:3000/init').then(res => {
+        if (res.status === 200) {
+          console.log('Initial Folder created!');
+          res.text().then(text => {
+          this.$store.commit('settings/setLocalPath', text);
+        })
+        } else {
+          console.error('ERROR MAMENE');
+        }
+      })
     },
 
     /**
@@ -105,7 +116,7 @@
    * SMALL UP
    */
   #app, .app{
-    height: calc(100% - 15vh);
+    height: calc(100% - 110px);
     overflow: scroll;
     -webkit-app-region: drag;
 
