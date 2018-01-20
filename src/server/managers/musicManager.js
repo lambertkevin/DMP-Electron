@@ -2,6 +2,7 @@ import fs from 'fs';
 import uuidv4 from 'uuid/v4';
 import MusicTempo from 'music-tempo';
 import { AudioContext } from 'web-audio-api';
+import childProcess from 'child_process';
 import { musicTypes } from '../config';
 
 export default {
@@ -102,41 +103,49 @@ export default {
     };
 
     return new Promise((resolve) => {
-      this.getSongBpm(song)
-        .then((songBpm) => {
-          musicTypesEntries.forEach((type) => {
-            const { bpms } = musicTypes[roundType][type];
+      const getSongBpmWorker = childProcess.fork('./src/server/workers/getSongBpmWorker.js', [
+        uuid,
+        song.path
+      ]);
 
-            const isMusicTypeContainingBpm = bpms.some((typeBpm) => {
-              const bpmToTest = Math.round(songBpm) / musicTypes[roundType][type].ratio;
-              // console.log(name, songBpm, type, typeBpm, Math.round(bpmToTest));
-              return typeBpm === Math.round(bpmToTest);
-            });
+      getSongBpmWorker.on('message', ({ songUuid, songBpm }) => {
+        console.log(songBpm, songUuid, song.uuid, song.name);
+        musicTypesEntries.forEach((type) => {
+          const { bpms } = musicTypes[roundType][type];
 
-            if (isMusicTypeContainingBpm) {
-            // If the meta are still containing the 'unknown' default object, remove it
-              if (songInfos.meta.some(meta => meta.type === 'unknown')) {
-                songInfos.meta = [];
-              }
-              // Add the new possible metas
-              songInfos.meta.push({
-                type,
-                probability: 1
-              });
-            }
+          const isMusicTypeContainingBpm = bpms.some((typeBpm) => {
+            const bpmToTest = Math.round(songBpm) / musicTypes[roundType][type].ratio;
+            // console.log(name, songBpm, type, typeBpm, Math.round(bpmToTest));
+            return typeBpm === Math.round(bpmToTest);
           });
 
-          if (songInfos.meta.length > 1) {
-            songInfos.meta = this.resetMeta();
+          if (isMusicTypeContainingBpm) {
+          // If the meta are still containing the 'unknown' default object, remove it
+            if (songInfos.meta.some(meta => meta.type === 'unknown')) {
+              songInfos.meta = [];
+            }
+            // Add the new possible metas
+            songInfos.meta.push({
+              type,
+              probability: 1
+            });
           }
-
-          resolve(songInfos);
-        }).catch((err) => {
-          console.error(name, err);
-
-          songInfos.meta = this.resetMeta();
-          resolve(songInfos);
         });
+
+        if (songInfos.meta.length > 1) {
+          songInfos.meta = this.resetMeta();
+        }
+
+        resolve(songInfos);
+      });
+
+      // this.getSongBpm(song)
+      //   .then().catch((err) => {
+      //     console.error(name, err);
+
+      //     songInfos.meta = this.resetMeta();
+      //     resolve(songInfos);
+      //   });
     });
   },
 

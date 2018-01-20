@@ -87,7 +87,7 @@ export default {
     generateTimetable({ commit }) {
       commit('setIsLoading', true);
       ipcRenderer.send('generate');
-      ipcRenderer.on('generate-reponse', (event, res) => {
+      ipcRenderer.on('generate-response', (event, res) => {
         commit('setIsLoading', false);
         commit('setRounds', res);
       });
