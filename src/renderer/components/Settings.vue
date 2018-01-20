@@ -144,16 +144,16 @@
       },
 
       createFolders() {
-        fetch('http://localhost:3000/folders')
-          .then((res) => {
-            if (res.status) {
-              console.log('Folder created');
-            }
-            this.toggleSettings();
-          }).catch((err) => {
-            console.error(err);
-            this.toggleSettings();
-          });
+        this.$electron.ipcRenderer.send('create-folders')
+
+        this.$electron.ipcRenderer.on('create-folders-reponse', (event, res) => {
+          if (res.code === 200) {
+            console.log('Folder created');
+          } else {
+            console.error(res.error);
+          }
+          this.toggleSettings();
+        });
       }
     },
 

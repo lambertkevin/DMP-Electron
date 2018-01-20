@@ -24,6 +24,7 @@
     position: fixed;
     top: 0;
     left: 0;
+    color: $white;
 
     &__text{
       position: fixed;
@@ -39,7 +40,7 @@
     &__spinner{
       width: 40px;
       height: 40px;
-      background-color: $black;
+      background-color: $white;
 
       position: fixed;
       top: 40%;

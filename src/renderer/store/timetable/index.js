@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { ipcRenderer } from 'electron';
 
 export default {
   namespaced: true,
@@ -76,22 +77,20 @@ export default {
   actions: {
     getTimetable({ commit }) {
       commit('clearRounds');
-
-      fetch('http://localhost:3000/rounds')
-        .then(res => res.json())
-        .then((data) => {
-          commit('setRounds', data);
-        });
+      ipcRenderer.send('get-rounds');
+      ipcRenderer.on('get-rounds-response', (event, res) => {
+        commit('setIsLoading', false);
+        commit('setRounds', res);
+      });
     },
 
     generateTimetable({ commit }) {
       commit('setIsLoading', true);
-      fetch('http://localhost:3000/generate')
-        .then(res => res.json())
-        .then((data) => {
-          commit('setIsLoading', false);
-          commit('setRounds', data);
-        });
+      ipcRenderer.send('generate');
+      ipcRenderer.on('generate-reponse', (event, res) => {
+        commit('setIsLoading', false);
+        commit('setRounds', res);
+      });
     }
   }
 };

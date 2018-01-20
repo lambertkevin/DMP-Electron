@@ -54,6 +54,11 @@
       DmpFooter
     },
 
+    data() {
+      return {
+      }
+    },
+
 
     computed: {
       ...mapState('settings', {
@@ -72,17 +77,21 @@
       }
     },
 
-
-    beforeCreate() {
-      this.$store.dispatch('settings/getMusicTypes');
-  
-      fetch('http://localhost:3000/init').then(res => {
-        if (res.status !== 200) {
-          res.json().then(data => {
-            console.error('ERROR MAMENE', data);
-          });
+    methods: {
+      initFolder() {
+        const response = this.$electron.ipcRenderer.sendSync('init');
+        if (response.code === 200){
+          console.log('Init Folder Ok');
+        } else {
+          console.error('ERROR MAMENE', response.error);
         }
-      })
+      }
+    },
+
+
+    created() {
+      this.$store.dispatch('settings/getMusicTypes');
+      this.initFolder();
     },
 
     /**

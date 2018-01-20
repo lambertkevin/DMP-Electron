@@ -1,3 +1,5 @@
+import { ipcRenderer } from 'electron';
+
 export default {
   namespaced: true,
 
@@ -35,11 +37,8 @@ export default {
      * @return {void}
      */
     getMusicTypes({ commit }) {
-      fetch('http://localhost:3000/musictypes')
-        .then(res => res.json())
-        .then((data) => {
-          commit('setMusicTypes', data);
-        });
+      const musicTypes = ipcRenderer.sendSync('musictypes');
+      commit('setMusicTypes', musicTypes);
     }
   }
 };

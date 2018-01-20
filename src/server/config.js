@@ -1,11 +1,11 @@
-import path from 'path';
-import os from 'os';
+const path = require('path');
+const os = require('os');
 
 /**
  * Config for Node
  * @type {Object}
  */
-export const nodeConfig = {
+exports.nodeConfig = {
   port: 3000,
   host: 'localhost',
   routes: {
@@ -17,19 +17,19 @@ export const nodeConfig = {
  * Location of the music folder
  * @type {String}
  */
-export const musicDir = path.join(os.homedir(), 'Documents', 'DMP', 'Music');
+exports.musicDir = path.join(os.homedir(), 'Documents', 'DMP', 'Music');
 
 /**
  * Location of the timing file
  * @type {String}
  */
-export const timingPath = path.join(os.homedir(), 'Documents', 'DMP', 'timing.xlsx');
+exports.timingPath = path.join(os.homedir(), 'Documents', 'DMP', 'timing.xlsx');
 
 /**
  * Associative object of column order
  * @type {Object}
  */
-export const timingColumnOrder = {
+exports.timingColumnOrder = {
   time: 0,
   category: 1,
   round: 3,
@@ -41,7 +41,7 @@ export const timingColumnOrder = {
  * All types of music and their properties
  * @type {Object}
  */
-export const musicTypes = {
+exports.musicTypes = {
   lat: {
     samba: {
       titles: [

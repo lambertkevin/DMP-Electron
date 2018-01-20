@@ -47,15 +47,13 @@
     methods: {
 
       setMusicForSong(type, song) {
-        const form = new FormData();
-        form.append('songPath', song.path);
-        form.append('type', type);
+        this.$electron.ipcRenderer.send('edit-song', {
+          songPath: song.path,
+          type
+        });
 
-        fetch('http://localhost:3000/edit', {
-          method: 'POST',
-          body: form
-        }).then((res) => {
-          if (res.status === 200) {
+        this.$electron.ipcRenderer.on('edit-song-reponse', (event, res) => {
+          if (res.error === 200) {
             this.$store.commit('timetable/setSongType', {
               song,
               round: song.round,
@@ -64,8 +62,9 @@
 
             this.$store.commit('timetable/setUnknownSongs',
               this.$store.state.timetable.unknownSongs.filter(_song => _song.uuid !== song.uuid));
-          } else if (res.status === 404) {
+          } else if (res.error === 404) {
             alert('Error 404');
+            console.log(res.error);
           }
         });
       }

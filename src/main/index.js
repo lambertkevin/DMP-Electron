@@ -1,4 +1,5 @@
-import { app, BrowserWindow } from 'electron'; // eslint-disable-line
+import { app, BrowserWindow, ipcMain } from 'electron'; // eslint-disable-line
+import server from '../server';
 
 /**
  * Set `__static` path to static files in production
@@ -22,7 +23,10 @@ function createWindow() {
     useContentSize: true,
     width: 1200,
     titleBarStyle: 'hidden',
-    backgroundColor: '#292D3E'
+    backgroundColor: '#292D3E',
+    webPreferences: {
+      webSecurity: false
+    }
   });
 
   mainWindow.loadURL(winURL);
@@ -30,16 +34,6 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
-
-  const installExtension = require('electron-devtools-installer');
-  installExtension.default(installExtension.VUEJS_DEVTOOLS)
-    .then(() => {})
-    .catch((err) => {
-      console.log('Unable to install `vue-devtools`: \n', err);
-    });
-
-  // eslint-disable-next-line
-  const server = require('../node/server');
 }
 
 app.on('ready', createWindow);
@@ -56,6 +50,8 @@ app.on('activate', () => {
   }
 });
 
+server();
+
 /**
  * Auto Updater
  *
@@ -65,7 +61,7 @@ app.on('activate', () => {
  */
 
 /*
-import { autoUpdater } from 'electron-updater'
+import { autoUpdater } from 'electron-updater';
 
 autoUpdater.on('update-downloaded', () => {
   autoUpdater.quitAndInstall()
