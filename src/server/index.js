@@ -62,7 +62,7 @@ export default () => {
     }
   });
 
-  ipcMain.on('generate', () => {
+  ipcMain.on('generate', (event) => {
     fileManager.getRounds(musicDir)
       .then((res) => {
         jsonfile.writeFileSync(path.join('src', 'server', 'data', 'db.json'), res);
