@@ -2,7 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import dirTree from 'directory-tree';
 import musicManager from './musicManager';
-import { musicTypes } from '../config';
+import { musicTypes, musicDir } from '../config';
+import { progress } from '../index';
+import { ipcMain } from 'electron'; // eslint-disable-line
 
 export default {
 
@@ -16,19 +18,41 @@ export default {
     return dirTree(_path, { exclude: /(.DS_Store|.gitkeep)/ });
   },
 
+  /**
+   * Return the number of songs in the music dir
+   *
+   * @return {Number}
+   */
+  getTotalSongs() {
+    const tree = this.getTree(musicDir);
+    const { children } = tree;
+
+    return children.reduce((oldSubdir, newSubdir) => {
+      const songs = this.getTree(newSubdir.path).children;
+      const musicExtensions = ['.mp3', '.wav'];
+
+      return oldSubdir.concat(songs.filter(song =>
+        musicExtensions.includes(song.extension)));
+    }, []).length;
+  },
+
 
   /**
    * Get an array of songs with informations for a given subdir path
    *
    * @param {String} subdirPath
+   * @param {Event} event
    * @return {Array} [of Songs with properties like song type]
    */
-  getArrayOfSongTypes(subdirPath) {
+  getArrayOfSongTypes(subdirPath, event) {
     const roundMetas = this.getRoundMetas(subdirPath);
     const tree = this.getTree(subdirPath);
     const { children } = tree;
 
-    return Promise.all(children.map(song => musicManager.getSongType(roundMetas.type, song)))
+    progress.totalSongs = this.getTotalSongs();
+
+    return Promise.all(children.map(song =>
+      musicManager.getSongType(roundMetas.type, song, event)))
       .then((result) => {
         const unknownSongTypes = result.filter(songInfos => songInfos.meta[0].type === 'unknown');
 
@@ -52,15 +76,16 @@ export default {
    * with their informations also
    *
    * @param {String} _path
+   * @param {Event} event
    * @return {JSON}
    */
-  getRounds(_path) {
+  getRounds(_path, event) {
     const tree = this.getTree(_path);
     const { children } = tree;
     const dancesOrder = {};
 
     const songsArrayPromise = Promise.all(tree.children.map(child =>
-      this.getArrayOfSongTypes(child.path)));
+      this.getArrayOfSongTypes(child.path, event)));
 
     const roundsArray = children.map((subdir, index) => {
       const roundMetas = this.getRoundMetas(subdir.path);

@@ -2,14 +2,41 @@
   <div class="loading-spinner">
     <div class="loading-spinner__spinner"></div>
     <div class="loading-spinner__text">
-      It will take a few minutes...
+      It will take a few minutes... <br/>
+      <progress 
+        v-if="songsTreated"
+        class="uk-progress" 
+        :value="songsTreated" 
+        :max="totalSongs"
+      >
+      </progress>
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'LoadingSpinner'
+    name: 'LoadingSpinner',
+
+    data() {
+      return {
+        songsTreated: 0,
+        totalSongs: 0
+      }
+    },
+
+    methods:{
+      getProgress() {
+        this.$electron.ipcRenderer.on('progress-update', (event, res) => {
+          this.songsTreated = res.songsTreated;
+          this.totalSongs = res.totalSongs;
+        });
+      }
+    },
+
+    mounted() {
+      this.getProgress();
+    }
   };
 </script>
 
@@ -36,6 +63,21 @@
       text-align: center;
       font-weight: bold;
       margin-top: 40px;
+
+      .uk-progress{
+        background-color: smart-scale($details, -40%);
+        height: rem-calc(5);
+        border-radius: rem-calc(10);
+        margin-top: rem-calc(5);
+
+        &::-webkit-progress-value{
+          background-color: $white;
+        }
+
+        &::-webkit-progress-bar{
+          background-color: smart-scale($details, -40%);
+        }
+      }
     }
     &__spinner{
       width: 40px;

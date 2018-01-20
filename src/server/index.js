@@ -5,6 +5,11 @@ import { musicDir, musicTypes } from './config';
 import fileManager from './managers/fileManager';
 import timingManager from './managers/timingManager';
 
+export const progress = {
+  songsTreated: 0,
+  totalSongs: 0
+};
+
 export default () => {
   ipcMain.on('test', (event) => {
     event.returnValue = 'test';
@@ -62,10 +67,12 @@ export default () => {
   });
 
   ipcMain.on('generate', (event) => {
-    fileManager.getRounds(musicDir)
+    fileManager.getRounds(musicDir, event)
       .then((res) => {
         jsonfile.writeFileSync(path.join('src', 'server', 'data', 'db.json'), res);
         event.sender.send('generate-response', res);
+        progress.songsTreated = 0;
+        progress.totalSongs = 0;
       }).catch(err => console.error(err));
   });
 

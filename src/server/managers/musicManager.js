@@ -4,26 +4,28 @@ import MusicTempo from 'music-tempo';
 import { AudioContext } from 'web-audio-api';
 import childProcess from 'child_process';
 import { musicTypes } from '../config';
+import { progress } from '../index';
 
 export default {
-
-
   /**
    * Asynchronously return the song type
    *
    * @param {String} roundType
    * @param {Object} _song
+   * @param {Event} event
    * @return {Promise}
    */
-  getSongType(roundType, _song) {
+  getSongType(roundType, _song, event) {
     const song = { uuid: uuidv4(), ..._song };
     const typeByName = this.getTypeByTitle(roundType, song);
 
     if (typeByName.meta[0].type !== 'unknown') {
+      progress.songsTreated += 1;
+      event.sender.send('progress-update', progress);
       return Promise.resolve(typeByName);
     }
 
-    return this.getTypeByBpm(roundType, song);
+    return this.getTypeByBpm(roundType, song, event);
   },
 
 
@@ -85,9 +87,10 @@ export default {
    *
    * @param {String} roundType
    * @param {Object} song
+   * @param {Event} event
    * @return {Promise}
    */
-  getTypeByBpm(roundType, song) {
+  getTypeByBpm(roundType, song, event) {
     const { name, path, uuid } = song;
     const musicTypesEntries = Object.keys(musicTypes[roundType]);
     const songInfos = {
@@ -109,6 +112,8 @@ export default {
       ]);
 
       getSongBpmWorker.on('message', ({ songUuid, songBpm }) => {
+        progress.songsTreated += 1;
+        event.sender.send('progress-update', progress);
         console.log(songBpm, songUuid, song.uuid, song.name);
         musicTypesEntries.forEach((type) => {
           const { bpms } = musicTypes[roundType][type];
@@ -138,14 +143,6 @@ export default {
 
         resolve(songInfos);
       });
-
-      // this.getSongBpm(song)
-      //   .then().catch((err) => {
-      //     console.error(name, err);
-
-      //     songInfos.meta = this.resetMeta();
-      //     resolve(songInfos);
-      //   });
     });
   },
 
@@ -204,4 +201,3 @@ export default {
     ];
   }
 };
-
