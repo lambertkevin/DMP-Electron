@@ -19,8 +19,8 @@
    * SMALL
    */
   .loading-spinner {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
@@ -28,14 +28,14 @@
 
     &__text{
       position: fixed;
-      top: 40%;
+      top: 50%;
       left: 50%;
-      margin-top: 50px;
       transform: translate(-50%, -50%);
       width: rem-calc(300);
       font-size: rem-calc(14);
       text-align: center;
       font-weight: bold;
+      margin-top: 40px;
     }
     &__spinner{
       width: 40px;
@@ -43,9 +43,9 @@
       background-color: $white;
 
       position: fixed;
-      top: 40%;
+      top: 50%;
       left: 50%;
-      margin: -20px 0 0 -20px;
+      margin: -30px 0 0 -20px;
       -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
       animation: sk-rotateplane 1.2s infinite ease-in-out;
     }

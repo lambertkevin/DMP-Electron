@@ -53,7 +53,9 @@
         if (player.isMuted()) {
           player.toggleMute();
         }
-        this.setVolume(1);
+        if (!this.volume){
+          this.setVolume(1);
+        }
 
         audioApi.addEventListener('canplay', () =>
           audioApi.play()
@@ -66,6 +68,7 @@
 
       setTimeUpdateEvent() {
         const audioApi = this.$refs.audioApi;
+  
         const stopMusic = () => {
           const musicDuration = this.musicDuration - this.$store.state.musicPlayer.fadeDuration;
           if (
@@ -87,6 +90,14 @@
 
         audioApi.src = '';
         audioApi.load();
+      },
+
+      onPlyrVolumeChange() {
+        const player = plyr.get('.plyr')[0];
+
+        player.on('volumechange', () => {
+          this.setVolume(player.getVolume());
+        });
       }
     },
 
@@ -127,8 +138,9 @@
      * @return {void}
      */
     mounted() {
-      this.setTimeUpdateEvent();
       plyr.setup(this.$refs.audioApi);
+      this.setTimeUpdateEvent();
+      this.onPlyrVolumeChange();
     },
   };
 </script>

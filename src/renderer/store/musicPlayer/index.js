@@ -52,8 +52,6 @@ export default {
       const timePerSteps = getters.fadeDurationInMs / state.fadeSteps;
       const fadeOutSpeed = (1 / getters.fadeDurationInMs) * timePerSteps;
 
-      console.log(timePerSteps, fadeOutSpeed);
-
       const fadeOutInterval = setInterval(() =>  {
         // if the volume will result in negativ, just send 0
         const newVolume = state.volume - fadeOutSpeed >= 0 ? state.volume - fadeOutSpeed : 0;
