@@ -134,7 +134,7 @@
       transition: all 0.5s ease;
 
       &--blur{
-        filter: blur(8px);
+        // filter: blur(2px);
         &:after{
           opacity: 1;
         }
@@ -143,7 +143,7 @@
 
     &__hider{
       position: fixed;
-      background: rgba($black, 0.75);
+      background: rgba($black, 0.98);
       height: 100%;
       width: 100%;
       top:0;
@@ -155,6 +155,7 @@
 
       &--show{
         opacity: 1;
+        pointer-events: auto;
       }
     }
 

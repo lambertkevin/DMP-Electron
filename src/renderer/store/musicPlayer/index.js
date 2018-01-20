@@ -8,7 +8,7 @@ export default {
     musicDuration: 90,
     isFading: false,
     fadeDuration: 5,
-    fadeSteps: 20
+    fadeSteps: 100
   },
 
   mutations: {
