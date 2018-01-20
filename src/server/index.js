@@ -1,7 +1,6 @@
 import path from 'path';
 import jsonfile from 'jsonfile';
-import { ipcMain } from 'electron';
-// import childProcess from 'child_process';
+import { ipcMain } from 'electron';// eslint-disable-line
 import { musicDir, musicTypes } from './config';
 import fileManager from './managers/fileManager';
 import timingManager from './managers/timingManager';
@@ -68,10 +67,6 @@ export default () => {
         jsonfile.writeFileSync(path.join('src', 'server', 'data', 'db.json'), res);
         event.sender.send('generate-response', res);
       }).catch(err => console.error(err));
-    // const worker = childProcess.fork('./src/server/workers/getRoundsWorker.js');
-    // worker.on('message', (res) => {
-    //   event.sender.send('generate-response', res);
-    // });
   });
 
   ipcMain.on('get-rounds', (event) => {

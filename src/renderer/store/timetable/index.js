@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer } from 'electron'; // eslint-disable-line
 
 export default {
   namespaced: true,

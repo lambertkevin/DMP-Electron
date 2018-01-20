@@ -56,7 +56,6 @@
   },
   "dependencies": {
     "directory-tree": "^2.0.0",
-    "electron": "^1.7.5",
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.0",
     "foundation-sites": "^6.4.4-rc1",
@@ -99,6 +98,7 @@
     "css-loader": "^0.28.4",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
+    "electron": "^1.7.5",
     "electron-builder": "^19.19.1",
     "eslint": "^4.4.1",
     "eslint-config-airbnb-base": "^11.2.0",

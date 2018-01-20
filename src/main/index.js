@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron'; // eslint-disable-line
+import { app, BrowserWindow } from 'electron'; // eslint-disable-line
 import server from '../server';
 
 /**
@@ -30,7 +30,7 @@ function createWindow() {
   });
 
   mainWindow.loadURL(winURL);
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
