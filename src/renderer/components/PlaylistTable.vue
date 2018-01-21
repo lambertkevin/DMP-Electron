@@ -3,14 +3,12 @@
     <div
       class="playlist-table__container relative"
     >
-      <table
-        class="grid-container"
-      >
+      <table class="grid-container">
         <playlist-table-row
           v-for="(row, index) in rounds"
           :key="index"
           :row="row"
-        />
+        ></playlist-table-row>
       </table>
     </div>
   </div>
@@ -39,27 +37,11 @@
      * @return {void}
      */
     mounted() {
-      const $ = require('jquery');
-      $(this.$el).foundation();
-
       this.$store.commit('musicPlayer/setDance', {});
       this.$store.commit('musicPlayer/setIsPlaying', false);
 
       if (!this.rounds.length) {
         this.$store.dispatch('timetable/getTimetable');
-      }
-    },
-
-
-    /**
-     * Lifecyle
-     *
-     * @return {void}
-     */
-    destroyed() {
-      const $ = require('jquery');
-      if (this.$el && this.$el.foundation) {
-        $(this.$el).foundation('destroy');
       }
     }
   };

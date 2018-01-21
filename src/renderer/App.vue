@@ -20,11 +20,12 @@
       <dmp-loading-spinner
         v-if="isLoading"
       ></dmp-loading-spinner>
-      <dmp-playlist-table
-        v-if="!isLoading"
-      ></dmp-playlist-table>
+      <transition name="fade" appear>
+        <dmp-playlist-table
+          v-if="!isLoading"
+        ></dmp-playlist-table>
+      </transition>
       <dmp-footer></dmp-footer>
-
       <dmp-modal-unknown-song></dmp-modal-unknown-song>
     </div>
   </div>

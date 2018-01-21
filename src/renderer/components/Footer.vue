@@ -86,28 +86,6 @@
           this.$store.commit('musicPlayer/setFadeDuration', parseInt(value, 10));
         }
       }
-    },
-
-    /**
-     * Lifecyle
-     *
-     * @return {void}
-     */
-    mounted() {
-      const $ = require('jquery');
-      $(this.$el).foundation();
-    },
-
-
-    /**
-     * Lifecyle
-     *
-     * @return {void}
-     */
-    destroyed() {
-      if (this.$el && this.$el.foundation) {
-        $(this.$el).foundation('destroy');
-      }
     }
   };
 </script>

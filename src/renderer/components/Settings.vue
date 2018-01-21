@@ -122,7 +122,7 @@
       },
 
       reset() {
-        this.$store.dispatch('timetable/getTimetable');
+        this.$store.commit('timetable/resetTimetable');
         this.toggleSettings();
         this.$store.commit('musicPlayer/setDance', {});
         this.$store.commit('musicPlayer/setIsPlaying', false);
@@ -146,7 +146,7 @@
       createFolders() {
         this.$electron.ipcRenderer.send('create-folders')
 
-        this.$electron.ipcRenderer.on('create-folders-reponse', (event, res) => {
+        this.$electron.ipcRenderer.on('create-folders-response', (event, res) => {
           if (res.code === 200) {
             console.log('Folder created');
           } else {
@@ -154,30 +154,6 @@
           }
           this.toggleSettings();
         });
-      }
-    },
-
-
-    /**
-     * Lifecyle
-     *
-     * @return {void}
-     */
-    mounted() {
-      const $ = require('jquery');
-      $(this.$el).foundation();
-    },
-
-
-    /**
-     * Lifecyle
-     *
-     * @return {void}
-     */
-    destroyed() {
-      const $ = require('jquery');
-      if (this.$el && this.$el.foundation) {
-        $(this.$el).foundation('destroy');
       }
     }
   };

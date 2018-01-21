@@ -73,30 +73,6 @@
       decrement(value) {
         this.$store.commit(`musicPlayer/set${_.upperFirst(this.name)}`, this.$store.state.musicPlayer[this.name] - value);
       }
-    },
-
-
-    /**
-     * Lifecyle
-     *
-     * @return {void}
-     */
-    mounted() {
-      const $ = require('jquery');
-      $(this.$el).foundation();
-    },
-
-
-    /**
-     * Lifecyle
-     *
-     * @return {void}
-     */
-    destroyed() {
-      if (this.$el && this.$el.foundation) {
-        const $ = require('jquery');
-        $(this.$el).foundation('destroy');
-      }
     }
   };
 </script>

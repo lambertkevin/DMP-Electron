@@ -1,11 +1,11 @@
 <template>
   <transition name="fade">
     <tr
-      class="playlist-table__row cell"
+      class="playlist-table__row"
       :class="{
         'playlist-table__row--blink': hasUnknownSongs
       }"
-      v-if="!isDone && row.time"
+      v-show="!isDone"
     >
       <td class="playlist-table__row__time">
         {{ row.time }}
@@ -33,7 +33,7 @@
         :key="index"
         :cat="cat"
         :cat-name="index"
-      />
+      ></playlist-table-songs>
       <td class="playlist-table__row__done">
         <div class="pretty p-svg p-jelly">
           <input
@@ -83,6 +83,10 @@
         'musicTypes'
       ]),
 
+      ...mapState('timetable', [
+        'rounds'
+      ]),
+
       category() {
         return this.row.category ? this.row.category.replace(/&/g, '\n') : '';
       },
@@ -93,7 +97,7 @@
 
       isDone: {
         get() {
-          const rowState = this.$store.state.timetable.rounds.find(el => el.id === this.row.id);
+          const rowState = this.rounds.find(el => el.id === this.row.id);
           return rowState.isDone;
         },
 
@@ -111,7 +115,8 @@
         if (!this.row.round) {
           return '';
         }
-        return this.row.round.toLowerCase() === 'f' ? 'finale' : this.row.round.replace(/\s/g, '');
+        const roundWithSlash = this.row.round.replace(/[|]/g, '/');
+        return roundWithSlash.toLowerCase() === 'f' ? 'finale' : roundWithSlash.replace(/\s/g, '');
       },
 
       longType() {
@@ -153,29 +158,6 @@
 
         return dances;
       }
-    },
-
-    /**
-      * Lifecyle
-      *
-      * @return {void}
-      */
-    mounted() {
-      const $ = require('jquery');
-      $(this.$el).foundation();
-    },
-
-
-    /**
-      * Lifecyle
-      *
-      * @return {void}
-      */
-    destroyed() {
-      if (this.$el && this.$el.foundation) {
-        const $ = require('jquery');
-        $(this.$el).foundation('destroy');
-      }
     }
   };
 </script>
@@ -187,6 +169,7 @@
    * SMALL
    */
   .playlist-table__row {
+    display: table-row;
 
     &--blink{
       animation: blink 5s infinite;

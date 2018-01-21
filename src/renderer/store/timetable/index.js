@@ -37,11 +37,11 @@ export default {
       const { round, isDone } = payload;
       if (isDone) {
         const stateRound = state.rounds.find(el => el.id === round.id);
-        const stateRoundsWithPrevious = state.rounds.splice(0, state.rounds.indexOf(stateRound) + 1);
-
+        const stateRoundsWithPrevious = [...state.rounds].splice(0, state.rounds.indexOf(stateRound) + 1);
         stateRoundsWithPrevious.forEach((el) => {
           el.isDone = true;
         });
+        // stateRound.isDone = isDone;
       } else {
         const stateRound = state.rounds.find(el => el.id === round.id);
         stateRound.isDone = isDone;
@@ -71,6 +71,15 @@ export default {
 
     setUnknownSongs(state, payload) {
       state.unknownSongs = payload;
+    },
+
+    resetTimetable(state) {
+      state.rounds.forEach((round) => {
+        round.isDone = false;
+        round.dances.forEach((song) => {
+          song.isDone = false;
+        });
+      });
     }
   },
 
@@ -79,8 +88,8 @@ export default {
       commit('clearRounds');
       ipcRenderer.send('get-rounds');
       ipcRenderer.on('get-rounds-response', (event, res) => {
-        commit('setIsLoading', false);
         commit('setRounds', res);
+        commit('setIsLoading', false);
       });
     },
 
@@ -88,8 +97,8 @@ export default {
       commit('setIsLoading', true);
       ipcRenderer.send('generate');
       ipcRenderer.on('generate-response', (event, res) => {
-        commit('setIsLoading', false);
         commit('setRounds', res);
+        commit('setIsLoading', false);
       });
     }
   }

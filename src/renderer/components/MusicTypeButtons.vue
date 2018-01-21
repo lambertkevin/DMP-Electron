@@ -68,29 +68,6 @@
           }
         });
       }
-    },
-
-    /**
-     * Lifecyle
-     *
-     * @return {void}
-     */
-    mounted() {
-      const $ = require('jquery');
-      $(this.$el).foundation();
-    },
-
-
-    /**
-     * Lifecyle
-     *
-     * @return {void}
-     */
-    destroyed() {
-      if (this.$el && this.$el.foundation) {
-        const $ = require('jquery');
-        $(this.$el).foundation('destroy');
-      }
     }
   };
 </script>

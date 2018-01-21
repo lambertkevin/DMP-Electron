@@ -1,17 +1,19 @@
 <template>
-  <div class="loading-spinner">
-    <div class="loading-spinner__spinner"></div>
-    <div class="loading-spinner__text">
-      It will take a few minutes... <br/>
-      <progress 
-        v-if="songsTreated"
-        class="uk-progress" 
-        :value="songsTreated" 
-        :max="totalSongs"
-      >
-      </progress>
+  <transition name="fade">
+    <div class="loading-spinner">
+      <div class="loading-spinner__spinner"></div>
+      <div class="loading-spinner__text">
+        It will take a few minutes... <br/>
+        <progress 
+          v-if="songsTreated"
+          class="uk-progress" 
+          :value="songsTreated" 
+          :max="totalSongs"
+        >
+        </progress>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>

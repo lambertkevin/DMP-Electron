@@ -67,12 +67,13 @@ export default () => {
   });
 
   ipcMain.on('generate', (event) => {
+    progress.songsTreated = 0;
+    progress.totalSongs = 0;
+    
     fileManager.getRounds(musicDir, event)
       .then((res) => {
         jsonfile.writeFileSync(path.join('src', 'server', 'data', 'db.json'), res);
         event.sender.send('generate-response', res);
-        progress.songsTreated = 0;
-        progress.totalSongs = 0;
       }).catch(err => console.error(err));
   });
 

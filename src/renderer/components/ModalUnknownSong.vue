@@ -122,31 +122,14 @@
        * @return {void}
        */
       mounted() {
-        const $ = require('jquery');
-        $(this.$el).foundation();
-
         if (this.isOpen) {
           this.setSongs();
         }
-
 
         UIkit.slideshow('[uk-slideshow]', {
           finite: true
         });
       },
-
-
-      /**
-       * Lifecyle
-       *
-       * @return {void}
-       */
-      destroyed() {
-        if (this.$el && this.$el.foundation) {
-          const $ = require('jquery');
-          $(this.$el).foundation('destroy');
-        }
-      }
     };
   </script>
 
