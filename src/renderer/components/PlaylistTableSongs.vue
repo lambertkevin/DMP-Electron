@@ -71,6 +71,13 @@
     },
 
     methods: {
+  
+      /**
+       * Get the name of the dance type to make it the title of the cell
+       *
+       * @param {Object}
+       * @return {String|Boolean}
+       */
       getLinkTitle(song) {
         if (Object.prototype.hasOwnProperty.call(song, 'meta') && song.meta.length) {
           return song.meta[0].type;
@@ -78,6 +85,12 @@
         return false;
       },
 
+      /**
+       * Launch the given music
+       *
+       * @param {Object}
+       * @return {void}
+       */
       launchMusic(dance) {
         this.$store.commit('musicPlayer/setDance', dance);
       }

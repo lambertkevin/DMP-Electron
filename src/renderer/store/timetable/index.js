@@ -11,6 +11,11 @@ export default {
   },
 
   getters: {
+    /**
+     * Return all the unknown sounds for all the rounds
+     *
+     * @param {Object} state
+     */
     getUnknownSongs(state) {
       return state.rounds
         .reduce((oldRound, newRound) => {
@@ -33,6 +38,12 @@ export default {
       state.rounds = payload;
     },
 
+    /**
+     * Set as done the given round, and all the ones that are before
+     *
+     * @param {Object} state
+     * @param {Object} payload
+     */
     setRoundIsDone(state, payload) {
       const { round, isDone } = payload;
       if (isDone) {
@@ -41,7 +52,6 @@ export default {
         stateRoundsWithPrevious.forEach((el) => {
           el.isDone = true;
         });
-        // stateRound.isDone = isDone;
       } else {
         const stateRound = state.rounds.find(el => el.id === round.id);
         stateRound.isDone = isDone;
@@ -52,6 +62,13 @@ export default {
       state.rounds = [];
     },
 
+    /**
+     * Add the song type to its name and file path to make it accessible after the
+     * ipc changed it through the fileManager
+     *
+     * @param {Object} state
+     * @param {Object} payload
+     */
     setSongType(state, payload) {
       const { type, song } = payload;
       const { round, path, name } = song;
@@ -63,6 +80,7 @@ export default {
       const newNameArray = nameArray.slice(0, nameArray.length - 1)
         .concat([` ${type}`]);
 
+      // Vue.set to add reactivy for the watchers
       Vue.set(songState, 'name', `${newNameArray.join('')}.${extension}`);
       Vue.set(songState, 'path', path.replace(name, songState.name));
       Vue.set(songState.meta[0], 'probability', 10);
@@ -84,6 +102,12 @@ export default {
   },
 
   actions: {
+
+    /**
+     * Get the timetable through ipc
+     *
+     * @param {Object} [commit]
+     */
     getTimetable({ commit }) {
       commit('clearRounds');
       ipcRenderer.send('get-rounds');
@@ -93,6 +117,11 @@ export default {
       });
     },
 
+    /**
+     * Generate the timetable (with bpms & cie) and then get the timetable, through ipc
+     *
+     * @param {Object} [commit]
+     */
     generateTimetable({ commit }) {
       commit('setIsLoading', true);
       ipcRenderer.send('generate');

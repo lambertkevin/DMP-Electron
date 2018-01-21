@@ -51,6 +51,12 @@
     },
 
     computed: {
+  
+      /**
+       * Return readable time duration
+       *
+       * @return {String}
+       */
       humanizedTime() {
         return humanizeDuration(this.time, {
           language: 'en',
@@ -66,10 +72,22 @@
 
     methods: {
 
+      /**
+       * Increment the input by given value
+       *
+       * @param {Number} value
+       * @return {void}
+       */
       increment(value) {
         this.$store.commit(`musicPlayer/set${_.upperFirst(this.name)}`, this.$store.state.musicPlayer[this.name] + value);
       },
 
+      /**
+       * Decrement the input by given value
+       *
+       * @param {Number} value
+       * @return {void}
+       */
       decrement(value) {
         this.$store.commit(`musicPlayer/set${_.upperFirst(this.name)}`, this.$store.state.musicPlayer[this.name] - value);
       }

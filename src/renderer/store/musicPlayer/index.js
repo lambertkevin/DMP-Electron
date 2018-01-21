@@ -43,6 +43,12 @@ export default {
   },
 
   actions: {
+
+    /**
+     * Fade out the volume of the currently playing music
+     *
+     * @param {Object} state, commit, getters
+     */
     fadeOut({ state, commit, getters }) {
       if (!state.isPlaying) {
         return false;
@@ -70,6 +76,7 @@ export default {
   },
 
   getters: {
+
     fadeDurationInMs(state) {
       return state.fadeDuration * 1000;
     }

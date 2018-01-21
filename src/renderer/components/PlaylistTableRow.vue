@@ -136,6 +136,14 @@
 
     methods: {
 
+      /**
+       * Order dances together by types, so they stay in the right
+       * cell in the table (sambas with sambas for example)
+       *
+       * @param {Array} dancesToOrganize
+       * @param {String} danceType
+       * @return {Object} [containing dances recognized and unknown]
+       */
       organizeDances(dancesToOrganize, danceType) {
         const musicTypes = this.musicTypes[danceType];
         const musicTypesKeys = Object.keys(musicTypes);

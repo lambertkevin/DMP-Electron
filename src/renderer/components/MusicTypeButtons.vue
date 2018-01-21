@@ -46,6 +46,14 @@
 
     methods: {
 
+      /**
+       * Ipc to edit the song file to add the dance name in it,
+       * to make it recognizable without bpm and gain performances
+       *
+       * @param {String} type
+       * @param {Object} song
+       * @return {void}
+       */
       setMusicForSong(type, song) {
         this.$electron.ipcRenderer.send('edit-song', {
           songPath: song.path,

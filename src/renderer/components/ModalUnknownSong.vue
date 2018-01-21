@@ -90,24 +90,47 @@
       },
 
       methods: {
+
+        /**
+         * Get the unknown songs
+         *
+         * @return {void}
+         */
         setSongs() {
           const unknownSongs = this.$store.getters['timetable/getUnknownSongs'];
           this.$store.commit('settings/setIsLookingForUnknownSongs', true);
           this.$store.commit('timetable/setUnknownSongs', unknownSongs);
         },
 
+        /**
+         * Modify the path to make it readable from Electron build
+         *
+         * @param {Object} song
+         * @return {void}
+         */
         path(song) {
-        return this.song.path ? `file://${this.song.path}` : null;
+          return this.song.path ? `file://${this.song.path}` : null;
         }
       },
 
       watch: {
+
+        /**
+         * Watch changes of isOpen to get the unknown songs
+         *
+         * @return {void}
+         */
         isOpen(isOpenState) {
           if (isOpenState) {
             this.setSongs();
           }
         },
 
+        /**
+         * Watch changes of songs to close when all songs has been recognized
+         *
+         * @return {void}
+         */
         songs(songsState) {
           if (!songsState.length) {
             this.isOpen = false;

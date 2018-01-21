@@ -28,6 +28,11 @@
         'localPath'
       ]),
 
+      /**
+       * Modify the path to make it possible to open in Electron bundle
+       *
+       * @return {void}
+       */
       path() {
         return this.dance.path ? `file://${this.dance.path}` : null;
       }
@@ -43,6 +48,11 @@
         'setVolume'
       ]),
 
+      /**
+       * Reset the volume and start playing the music
+       *
+       * @return {void}
+       */
       playMusic() {
         const audioApi = this.$refs.audioApi;
         const player = plyr.get('.plyr')[0];
@@ -62,10 +72,20 @@
         );
       },
 
+      /**
+       * Pause the player
+       *
+       * @return {void}
+       */
       stopMusic() {
         this.$refs.audioApi.pause();
       },
 
+      /**
+       * Set the interval loop the check for the good musicDuration before fadeOut
+       *
+       * @return {void}
+       */
       setTimeUpdateEvent() {
         const audioApi = this.$refs.audioApi;
   
@@ -85,6 +105,11 @@
         audioApi.addEventListener('timeupdate', stopMusic);
       },
 
+      /**
+       * Reset the src of the player and make it look not activated in the browser
+       *
+       * @return {void}
+       */
       resetPlayer() {
         const audioApi = this.$refs.audioApi;
 
@@ -92,6 +117,11 @@
         audioApi.load();
       },
 
+      /**
+       * Set the volume from plyr in data on change
+       *
+       * @return {void}
+       */
       onPlyrVolumeChange() {
         const player = plyr.get('.plyr')[0];
 
@@ -102,12 +132,25 @@
     },
 
     watch: {
+
+      /**
+       * Watch changes of dance object to reset the player if it's empty
+       *
+       * @param {Object} danceState
+       * @return {void}
+       */
       dance(danceState) {
         if (!Object.keys(danceState).length) {
           this.resetPlayer();
         }
       },
 
+      /**
+       * Watch changes of isPlayer to start the music when it's true
+       *
+       * @param {Boolean} isPlayingState
+       * @return {void}
+       */
       isPlaying(isPlayingState) {
         if (isPlayingState) {
           this.playMusic();
@@ -117,16 +160,31 @@
         this.stopMusic();
       },
 
+      /**
+       * Watch changes of volume to update the player
+       *
+       * @return {void}
+       */
       volume() {
         const player = plyr.get('.plyr')[0];
         player.setVolume(this.volume * 10);
         this.$refs.audioApi.volume = this.volume;
       },
 
+      /**
+       * Watch changes of musicDuration to update interval loop
+       *
+       * @return {void}
+       */
       musicDuration() {
         this.setTimeUpdateEvent();
       },
 
+      /**
+       * Watch changes of musicDuration to update interval loop
+       *
+       * @return {void}
+       */
       fadeDuration() {
         this.setTimeUpdateEvent();
       }

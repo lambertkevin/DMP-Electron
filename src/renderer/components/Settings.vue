@@ -117,10 +117,21 @@
     },
 
     methods: {
+  
+      /**
+       * Toggle the isOpen state
+       *
+       * @return {void}
+       */
       toggleSettings() {
         this.isOpen = !this.isOpen;
       },
 
+      /**
+       * Reset the timetable and set isDone to true for every song and round
+       *
+       * @return {void}
+       */
       reset() {
         this.$store.commit('timetable/resetTimetable');
         this.toggleSettings();
@@ -128,6 +139,11 @@
         this.$store.commit('musicPlayer/setIsPlaying', false);
       },
 
+      /**
+       * Generate the timetable
+       *
+       * @return {void}
+       */
       generate() {
         this.$store.commit('timetable/clearRounds');
         this.$store.dispatch('timetable/generateTimetable');
@@ -136,6 +152,12 @@
         this.$store.commit('musicPlayer/setIsPlaying', false);
       },
 
+      /**
+       * Determine if there is songs that need to be recognized
+       * because name and bpm failed
+       *
+       * @return {void}
+       */
       checkForUnkownSongs() {
         const unknownSongs = this.$store.getters['timetable/getUnknownSongs'];
         this.$store.commit('settings/setIsLookingForUnknownSongs', unknownSongs.length > 1);
@@ -143,6 +165,11 @@
         this.toggleSettings();
       },
 
+      /**
+       * Create all the necessary folders to put the songs for each round
+       *
+       * @return {void}
+       */
       createFolders() {
         this.$electron.ipcRenderer.send('create-folders')
 

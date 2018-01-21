@@ -28,6 +28,12 @@
     },
 
     methods:{
+  
+      /**
+       * Ipc receiving the progress of the generation of the timetable
+       *
+       * @return {void}
+       */
       getProgress() {
         this.$electron.ipcRenderer.on('progress-update', (event, res) => {
           this.songsTreated = res.songsTreated;
@@ -36,6 +42,11 @@
       }
     },
 
+    /**
+     * Lifecycle
+     *
+     * @return {void}
+     */
     mounted() {
       this.getProgress();
     }
