@@ -1,5 +1,17 @@
+/**
+ * THIS FILE HAS BEEN MOVED TO A PROPER GITHUB REPO TO BE INSTALLED AS NODE MODULE
+ * WHY THE FUCK WOULD I DO THAT? BECAUSE FUCKIN ELECTRON DOES NOT ALLOW ME TO CREATE A CHILD
+ * PROCESS FORK FROM A FILE BECAUSE IT REMOVES EVERY FUCKIN FILES. SO NOW IT'S INSTALLED THIS WAY
+ * AND WE CHEAT THEIR SYSTEM TO BE ABLE TO JUST DO A FUCKIN FORK.
+ * AND THAT'S A LOT OF FUCKIN.
+ *
+ * Github repo:
+ * https://github.com/kvinlambert/bpm-webworker
+ */
+
 const fs = require('fs');
 const MusicTempo = require('music-tempo');
+const log = require('electron-log');
 const { AudioContext } = require('web-audio-api');
 
 const songUuid = process.argv[2];
@@ -27,4 +39,5 @@ context.decodeAudioData(fs.readFileSync(songPath), (buffer) => {
     songUuid,
     songBpm: parseFloat(mt.tempo)
   });
+  log.warn('process is sent');
 }, err => process.send(err));

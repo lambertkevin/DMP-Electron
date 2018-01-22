@@ -1,5 +1,7 @@
+import fs from 'fs';
 import path from 'path';
 import jsonfile from 'jsonfile';
+import log from 'electron-log';
 import { ipcMain } from 'electron';// eslint-disable-line
 import { musicDir, musicTypes } from '../server/config';
 import fileManager from '../server/managers/fileManager';
@@ -66,13 +68,17 @@ export default () => {
 
     fileManager.getRounds(musicDir, event)
       .then((res) => {
-        jsonfile.writeFileSync(path.join('src', 'server', 'data', 'db.json'), res);
+        try {
+          jsonfile.writeFileSync(path.join(musicDir, '..', '.data', 'db.json'), res);
+        } catch (err) {
+          log.error(err);
+        }
         event.sender.send('generate-response', res);
       }).catch(err => console.error(err));
   });
 
   ipcMain.on('get-rounds', (event) => {
-    const jsonTiming = jsonfile.readFileSync(path.join('src', 'server', 'data', 'db.json'));
+    const jsonTiming = jsonfile.readFileSync(path.join(musicDir, '..', '.data', 'db.json'));
     event.sender.send('get-rounds-response', jsonTiming);
   });
 };

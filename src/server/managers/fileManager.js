@@ -11,14 +11,15 @@ export default {
 
   createInitialFolder() {
     try {
-      if (!fs.statSync(path.join(musicDir))) {
-        mkdirp.sync(path.join(musicDir));
-      }
+      mkdirp.sync(musicDir);
+      mkdirp.sync(path.join(musicDir, '..', '.data'));
+
       return {
         code: 200,
-        text: path.join(musicDir)
+        text: musicDir
       };
     } catch (err) {
+      console.error(err);
       return {
         code: 404,
         text: err

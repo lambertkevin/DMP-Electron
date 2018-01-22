@@ -72,9 +72,7 @@
             </span>
           </span>
         </div>
-        <div
-          v-if="!process.env.IS_WEB"
-        >
+        <div>
           <span
             class="button"
             @click="createFolders"

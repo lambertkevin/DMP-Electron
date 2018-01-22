@@ -76,10 +76,10 @@
       initFolder() {
         const checkResponse = (response) => {
           if (response.code === 200){
-          console.log('Init Folder Ok');
-          this.$store.commit('settings/setLocalPath', response.text);
+            console.log('Init Folder Ok');
+            this.$store.commit('settings/setLocalPath', response.text);
           } else {
-            console.error('ERROR MAMENE', response.error);
+            console.error('ERROR MAMENE', response);
           }
         };
 

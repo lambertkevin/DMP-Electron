@@ -55,9 +55,11 @@
     }
   },
   "dependencies": {
+    "bpm-webworker": "git+https://github.com/kvinlambert/bpm-webworker.git",
     "directory-tree": "^2.0.0",
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.0",
+    "electron-log": "^2.2.14",
     "foundation-sites": "^6.4.4-rc1",
     "humanize-duration": "^3.12.1",
     "jquery": "^3.2.1",
@@ -69,6 +71,7 @@
     "music-tempo": "^1.0.3",
     "plyr": "^2.0.18",
     "pretty-checkbox": "^3.0.3",
+    "socket.io-client": "^2.0.4",
     "uikit": "^3.0.0-beta.36",
     "uuid": "^3.2.1",
     "vue": "^2.3.3",

@@ -1,4 +1,6 @@
 import fs from 'fs';
+import log from 'electron-log';
+import nodePath from 'path';
 import uuidv4 from 'uuid/v4';
 import MusicTempo from 'music-tempo';
 import { AudioContext } from 'web-audio-api';
@@ -106,14 +108,29 @@ export default {
     };
 
     return new Promise((resolve) => {
-      const getSongBpmWorker = childProcess.fork('./src/server/workers/getSongBpmWorker.js', [
-        uuid,
-        song.path
-      ]);
+      let workerPath = '';
+      if (process.env.NODE_ENV === 'production') {
+        workerPath = nodePath.join(__dirname, '..', '..', 'node_modules', 'bpm-webworker', 'getSongBpmWorker.js');
+      } else if (process.env.NODE_ENV === 'development') {
+        workerPath = nodePath.join('.', 'src', 'server', 'workers', 'getSongBpmWorker.js');
+      } else {
+        workerPath = nodePath.join('.', 'workers', 'getSongBpmWorker.js');
+      }
+
+      let getSongBpmWorker;
+      try {
+        getSongBpmWorker = childProcess.fork(workerPath, [
+          uuid,
+          song.path
+        ]);
+      } catch (err) {
+        log.error(err);
+      }
 
       getSongBpmWorker.on('message', ({ songUuid, songBpm }) => {
         progress.songsTreated += 1;
         event.sender.send('progress-update', progress);
+        log.warn(songBpm, songUuid, song.uuid, song.name);
         console.log(songBpm, songUuid, song.uuid, song.name);
         musicTypesEntries.forEach((type) => {
           const { bpms } = musicTypes[roundType][type];

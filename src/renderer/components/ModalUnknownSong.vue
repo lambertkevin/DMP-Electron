@@ -37,7 +37,7 @@
                 <div class="grid-x align-center full-height">
                   <div class="modal-unknown-song__player cell small-16">
                     <audio
-                      :src="path(song)"
+                      :src="getPath(song)"
                       controls
                     ></audio>
                   </div>
@@ -86,23 +86,23 @@
           set(isOpenState) {
             this.$store.commit('settings/setIsLookingForUnknownSongs', isOpenState);
           }
-        },
+        }
+      },
+
+      methods: {
 
         /**
          * Modify the path to make it possible to open in Electron bundle
          *
          * @return {void}
          */
-        path() {
+        getPath(song) {
           if (!process.env.IS_WEB) {
-            return this.dance.path ? `file://${this.dance.path}` : null;
+            return song.path ? `file://${song.path}` : null;
           } else {
-            return this.dance.path ? this.dance.path.replace(this.localPath, 'music') : null;
+            return song.path ? song.path.replace(this.localPath, 'music') : null;
           }
-        }
-      },
-
-      methods: {
+        },
 
         /**
          * Get the unknown songs
