@@ -1,4 +1,3 @@
-import fs from 'fs';
 import path from 'path';
 import jsonfile from 'jsonfile';
 import log from 'electron-log';

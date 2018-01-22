@@ -177,7 +177,6 @@
    * SMALL
    */
   .playlist-table__row {
-    display: table-row;
 
     &--blink{
       animation: blink 5s infinite;
@@ -191,7 +190,7 @@
 
     td{
       padding: rem-calc(10 0);
-      border-bottom: 1px solid smart-scale($black, -8%);
+      border-bottom: 1px solid smart-scale($black, -12%);
       color: $white;
       font-weight: 500;
     }

@@ -130,12 +130,12 @@
 
       &.no-bg{
         background: none!important;
-        color: smart-scale($black, -15%)!important;
+        color: smart-scale($black, -20%)!important;
         font-size: rem-calc(20);
         transition: all 0.3s ease;
 
         &:hover{
-          color: smart-scale($black, -30%)!important;
+          color: smart-scale($black, -35%)!important;
         }
       }
     }
