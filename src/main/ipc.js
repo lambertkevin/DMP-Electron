@@ -1,9 +1,9 @@
 import path from 'path';
 import jsonfile from 'jsonfile';
 import { ipcMain } from 'electron';// eslint-disable-line
-import { musicDir, musicTypes } from './config';
-import fileManager from './managers/fileManager';
-import timingManager from './managers/timingManager';
+import { musicDir, musicTypes } from '../server/config';
+import fileManager from '../server/managers/fileManager';
+import timingManager from '../server/managers/timingManager';
 
 export const progress = {
   songsTreated: 0,
@@ -53,7 +53,7 @@ export default () => {
 
   ipcMain.on('init', (event) => {
     try {
-      timingManager.createInitialFolder();
+      fileManager.createInitialFolder();
 
       event.returnValue = {
         code: 200
@@ -69,7 +69,7 @@ export default () => {
   ipcMain.on('generate', (event) => {
     progress.songsTreated = 0;
     progress.totalSongs = 0;
-    
+
     fileManager.getRounds(musicDir, event)
       .then((res) => {
         jsonfile.writeFileSync(path.join('src', 'server', 'data', 'db.json'), res);

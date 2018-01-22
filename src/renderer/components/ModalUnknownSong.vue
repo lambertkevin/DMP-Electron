@@ -109,7 +109,7 @@
          * @return {void}
          */
         path(song) {
-          return this.song.path ? `file://${this.song.path}` : null;
+          return song.path ? `file://${song.path}` : null;
         }
       },
 

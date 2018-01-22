@@ -1,5 +1,3 @@
-import { ipcRenderer } from 'electron'; // eslint-disable-line
-
 export default {
   namespaced: true,
 
@@ -37,8 +35,15 @@ export default {
      * @return {void}
      */
     getMusicTypes({ commit }) {
-      const musicTypes = ipcRenderer.sendSync('musictypes');
-      commit('setMusicTypes', musicTypes);
+      if (process.env.IS_WEB) {
+        const { ipcRenderer } = require('electron'); // eslint-disable-line
+        const musicTypes = ipcRenderer.sendSync('musictypes');
+        commit('setMusicTypes', musicTypes);
+      } else {
+        this._vm.$socket.emit('musictypes', (musicTypes) => {
+          commit('setMusicTypes', musicTypes);
+        });
+      }
     }
   }
 };

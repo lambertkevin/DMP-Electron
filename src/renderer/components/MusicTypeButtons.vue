@@ -55,13 +55,8 @@
        * @return {void}
        */
       setMusicForSong(type, song) {
-        this.$electron.ipcRenderer.send('edit-song', {
-          songPath: song.path,
-          type
-        });
-
-        this.$electron.ipcRenderer.on('edit-song-reponse', (event, res) => {
-          if (res.error === 200) {
+        const updateSong = (res) => {
+          if (res.code === 200) {
             this.$store.commit('timetable/setSongType', {
               song,
               round: song.round,
@@ -70,11 +65,30 @@
 
             this.$store.commit('timetable/setUnknownSongs',
               this.$store.state.timetable.unknownSongs.filter(_song => _song.uuid !== song.uuid));
-          } else if (res.error === 404) {
+
+          } else if (res.code === 404) {
             alert('Error 404');
             console.log(res.error);
           }
-        });
+        };
+
+        if (process.env.IS_WEB){
+          this.$electron.ipcRenderer.send('edit-song', {
+            songPath: song.path,
+            type
+          });
+          this.$electron.ipcRenderer.on('edit-song-response', (event, res) => {
+            updateSong(res);
+          });
+        } else {
+          this.$socket.emit('edit-song', {
+            songPath: song.path,
+            type
+          });
+          this.$socket.on('edit-song-response', (res) => {
+            updateSong(res);
+          });
+        }
       }
     }
   };

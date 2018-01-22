@@ -35,10 +35,20 @@
        * @return {void}
        */
       getProgress() {
-        this.$electron.ipcRenderer.on('progress-update', (event, res) => {
+        const updateProgress = (res) => {
           this.songsTreated = res.songsTreated;
           this.totalSongs = res.totalSongs;
-        });
+        };
+
+        if (process.env.IS_WEB){
+          this.$electron.ipcRenderer.on('progress-update', (event, res) => {
+            updateProgress(res);
+          });
+        } else {
+          this.$socket.on('progress-update', (res) => {
+            updateProgress(res);
+          });
+        }
       }
     },
 

@@ -10,6 +10,16 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+const scssOptions = {
+  includePaths: [
+    path.resolve('node_modules', 'foundation-sites', 'scss'),
+    path.resolve('node_modules', 'foundation-sites', '_vendor', 'sassy-lists', 'stylesheets', 'functions')
+  ],
+  data: `
+  @import "src/renderer/assets/sass/imports.scss";
+  `
+}
+
 let webConfig = {
   devtool: '#cheap-module-eval-source-map',
   entry: {
@@ -51,9 +61,42 @@ let webConfig = {
           loader: 'vue-loader',
           options: {
             extractCSS: true,
+            postcss: [
+              require('postcss-cssnext')(),
+              require('precss')()
+            ],
             loaders: {
-              sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1',
-              scss: 'vue-style-loader!css-loader!sass-loader'
+              sass: [
+                'vue-style-loader', 
+                {
+                  loader: 'css-loader',
+                  options: {
+                      minimize: false,
+                      sourceMap: true
+                  }
+                }, 
+                {
+                  loader: 'sass-loader',
+                  options: {
+                      indentedSyntax: true,
+                      sourceMap: true
+                  }
+                }
+              ],
+              scss: [
+                'vue-style-loader', 
+                {
+                  loader: 'css-loader',
+                  options: {
+                      minimize: false,
+                      sourceMap: true
+                  }
+                }, 
+                {
+                  loader: 'sass-loader',
+                  options: scssOptions
+                }
+              ]
             }
           }
         }
@@ -107,7 +150,7 @@ let webConfig = {
       '@': path.join(__dirname, '../src/renderer'),
       'vue$': 'vue/dist/vue.esm.js'
     },
-    extensions: ['.js', '.vue', '.json', '.css']
+    extensions: ['.js', '.vue', '.json', '.css', '.scss']
   },
   target: 'web'
 }

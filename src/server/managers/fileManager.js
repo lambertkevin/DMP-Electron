@@ -1,12 +1,30 @@
 import fs from 'fs';
 import path from 'path';
+import mkdirp from 'mkdirp';
 import dirTree from 'directory-tree';
 import musicManager from './musicManager';
 import { musicTypes, musicDir } from '../config';
-import { progress } from '../index';
+import { progress } from '../../main/ipc';
 import { ipcMain } from 'electron'; // eslint-disable-line
 
 export default {
+
+  createInitialFolder() {
+    try {
+      if (!fs.statSync(path.join(musicDir))) {
+        mkdirp.sync(path.join(musicDir));
+      }
+      return {
+        code: 200,
+        text: path.join(musicDir)
+      };
+    } catch (err) {
+      return {
+        code: 404,
+        text: err
+      };
+    }
+  },
 
   /**
    * Get JSON Tree of a give path

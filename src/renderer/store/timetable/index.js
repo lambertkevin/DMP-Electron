@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { ipcRenderer } from 'electron'; // eslint-disable-line
 
 export default {
   namespaced: true,
@@ -109,12 +108,24 @@ export default {
      * @param {Object} [commit]
      */
     getTimetable({ commit }) {
-      commit('clearRounds');
-      ipcRenderer.send('get-rounds');
-      ipcRenderer.on('get-rounds-response', (event, res) => {
+      const setRoundsAndLoading = (res) => {
         commit('setRounds', res);
         commit('setIsLoading', false);
-      });
+      };
+      commit('clearRounds');
+
+      if (process.env.IS_WEB) {
+        const { ipcRenderer } = require('electron'); // eslint-disable-line
+        ipcRenderer.send('get-rounds');
+        ipcRenderer.on('get-rounds-response', (event, res) => {
+          setRoundsAndLoading(res);
+        });
+      } else {
+        this._vm.$socket.emit('get-rounds');
+        this._vm.$socket.on('get-rounds-response', (res) => {
+          setRoundsAndLoading(res);
+        });
+      }
     },
 
     /**
@@ -123,12 +134,24 @@ export default {
      * @param {Object} [commit]
      */
     generateTimetable({ commit }) {
-      commit('setIsLoading', true);
-      ipcRenderer.send('generate');
-      ipcRenderer.on('generate-response', (event, res) => {
+      const setRoundsAndLoading = (res) => {
         commit('setRounds', res);
         commit('setIsLoading', false);
-      });
+      };
+      commit('setIsLoading', true);
+
+      if (process.env.IS_WEB) {
+        const { ipcRenderer } = require('electron'); // eslint-disable-line
+        ipcRenderer.send('generate');
+        ipcRenderer.on('generate-response', (event, res) => {
+          setRoundsAndLoading(res);
+        });
+      } else {
+        this._vm.$socket.emit('generate');
+        this._vm.$socket.on('generate-response', (res) => {
+          setRoundsAndLoading(res);
+        });
+      }
     }
   }
 };

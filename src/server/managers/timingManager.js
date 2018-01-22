@@ -1,4 +1,3 @@
-import fs from 'fs';
 import path from 'path';
 import xlsx from 'xlsx';
 import moment from 'moment';
@@ -6,23 +5,6 @@ import mkdirp from 'mkdirp';
 import { timingColumnOrder, timingPath, musicDir } from '../config';
 
 export default {
-
-  createInitialFolder() {
-    try {
-      if (!fs.statSync(path.join(musicDir))) {
-        mkdirp.sync(path.join(musicDir));
-      }
-      return {
-        code: 200,
-        text: path.join(musicDir)
-      };
-    } catch (err) {
-      return {
-        code: 404,
-        text: err
-      };
-    }
-  },
 
   createFolders() {
     const jsonTiming = this.getXlsxAsJson(timingPath);

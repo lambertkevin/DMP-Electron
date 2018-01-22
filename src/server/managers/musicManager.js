@@ -4,7 +4,7 @@ import MusicTempo from 'music-tempo';
 import { AudioContext } from 'web-audio-api';
 import childProcess from 'child_process';
 import { musicTypes } from '../config';
-import { progress } from '../index';
+import { progress } from '../../main/ipc';
 
 export default {
   /**

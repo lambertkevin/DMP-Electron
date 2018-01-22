@@ -55,12 +55,6 @@
       DmpFooter
     },
 
-    data() {
-      return {
-      }
-    },
-
-
     computed: {
       ...mapState('settings', {
         areSettingsOpen: state => state.isOpen,
@@ -80,11 +74,20 @@
 
     methods: {
       initFolder() {
-        const response = this.$electron.ipcRenderer.sendSync('init');
-        if (response.code === 200){
+        const checkResponse = (response) => {
+          if (response.code === 200){
           console.log('Init Folder Ok');
+          } else {
+            console.error('ERROR MAMENE', response.error);
+          }
+        };
+
+        if (process.env.IS_WEB) {
+          checkResponse(this.$electron.ipcRenderer.sendSync('init'));
         } else {
-          console.error('ERROR MAMENE', response.error);
+          this.$socket.emit('init', (res) => {
+            checkResponse(res);
+          })
         }
       }
     },

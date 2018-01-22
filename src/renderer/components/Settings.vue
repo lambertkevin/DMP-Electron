@@ -171,16 +171,31 @@
        * @return {void}
        */
       createFolders() {
-        this.$electron.ipcRenderer.send('create-folders')
+        if (process.env.IS_WEB) {
 
-        this.$electron.ipcRenderer.on('create-folders-response', (event, res) => {
-          if (res.code === 200) {
-            console.log('Folder created');
-          } else {
-            console.error(res.error);
-          }
-          this.toggleSettings();
-        });
+          this.$electron.ipcRenderer.send('create-folders');
+          this.$electron.ipcRenderer.on('create-folders-response', (event, res) => {
+            if (res.code === 200) {
+              console.log('Folder created');
+            } else {
+              console.error(res.error);
+            }
+            this.toggleSettings();
+          });
+  
+        } else {
+
+          this.$socket.emit('create-folders');
+          this.$socket.on('create-folders-response', (res) => {
+            if (res.code === 200) {
+              console.log('Folders created');
+            } else {
+              console.error(res.error);
+            }
+            this.toggleSettings();
+          });
+  
+        }
       }
     }
   };
