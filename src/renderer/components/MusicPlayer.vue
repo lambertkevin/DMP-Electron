@@ -34,7 +34,11 @@
        * @return {void}
        */
       path() {
-        return this.dance.path ? `file://${this.dance.path}` : null;
+        if (!process.env.IS_WEB) {
+          return this.dance.path ? `file://${this.dance.path}` : null;
+        } else {
+          return this.dance.path ? this.dance.path.replace(this.localPath, 'music') : null;
+        }
       }
     },
 

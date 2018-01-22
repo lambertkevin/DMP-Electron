@@ -40,7 +40,7 @@
           this.totalSongs = res.totalSongs;
         };
 
-        if (process.env.IS_WEB){
+        if (!process.env.IS_WEB){
           this.$electron.ipcRenderer.on('progress-update', (event, res) => {
             updateProgress(res);
           });

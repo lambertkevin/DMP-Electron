@@ -5,7 +5,8 @@ export default {
     isLookingForUnknownSongs: false,
     isOpen: false,
     isHover: false,
-    musicTypes: {}
+    musicTypes: {},
+    localPath: ''
   },
 
   mutations: {
@@ -23,6 +24,10 @@ export default {
 
     setMusicTypes(state, payload) {
       state.musicTypes = payload;
+    },
+
+    setLocalPath(state, payload) {
+      state.localPath = payload;
     }
   },
 
@@ -35,7 +40,7 @@ export default {
      * @return {void}
      */
     getMusicTypes({ commit }) {
-      if (process.env.IS_WEB) {
+      if (!process.env.IS_WEB) {
         const { ipcRenderer } = require('electron'); // eslint-disable-line
         const musicTypes = ipcRenderer.sendSync('musictypes');
         commit('setMusicTypes', musicTypes);

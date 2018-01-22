@@ -24,7 +24,6 @@ export default () => {
 
     try {
       const responseCode = fileManager.addTextToFile(songPath, type);
-
       event.sender.send('edit-song-response', {
         code: responseCode
       });
@@ -39,7 +38,6 @@ export default () => {
   ipcMain.on('create-folders', (event) => {
     try {
       timingManager.createFolders();
-
       event.sender.send('create-folders-response', {
         code: 200
       });
@@ -53,11 +51,7 @@ export default () => {
 
   ipcMain.on('init', (event) => {
     try {
-      fileManager.createInitialFolder();
-
-      event.returnValue = {
-        code: 200
-      };
+      event.returnValue = fileManager.createInitialFolder();
     } catch (err) {
       event.returnValue = {
         code: 400,

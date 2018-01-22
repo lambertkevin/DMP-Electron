@@ -58,7 +58,7 @@
     computed: {
       ...mapState('settings', {
         areSettingsOpen: state => state.isOpen,
-        musicTypes: state => state.musicTypes
+        musicTypes: state => state.musicTypes,
       }),
       ...mapState('timetable', {
         isLoading: state => state.isLoading
@@ -77,12 +77,13 @@
         const checkResponse = (response) => {
           if (response.code === 200){
           console.log('Init Folder Ok');
+          this.$store.commit('settings/setLocalPath', response.text);
           } else {
             console.error('ERROR MAMENE', response.error);
           }
         };
 
-        if (process.env.IS_WEB) {
+        if (!process.env.IS_WEB) {
           checkResponse(this.$electron.ipcRenderer.sendSync('init'));
         } else {
           this.$socket.emit('init', (res) => {

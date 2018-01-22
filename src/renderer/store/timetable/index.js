@@ -114,7 +114,7 @@ export default {
       };
       commit('clearRounds');
 
-      if (process.env.IS_WEB) {
+      if (!process.env.IS_WEB) {
         const { ipcRenderer } = require('electron'); // eslint-disable-line
         ipcRenderer.send('get-rounds');
         ipcRenderer.on('get-rounds-response', (event, res) => {
@@ -140,7 +140,7 @@ export default {
       };
       commit('setIsLoading', true);
 
-      if (process.env.IS_WEB) {
+      if (!process.env.IS_WEB) {
         const { ipcRenderer } = require('electron'); // eslint-disable-line
         ipcRenderer.send('generate');
         ipcRenderer.on('generate-response', (event, res) => {

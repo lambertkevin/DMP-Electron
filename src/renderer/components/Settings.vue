@@ -72,7 +72,9 @@
             </span>
           </span>
         </div>
-        <div>
+        <div
+          v-if="!process.env.IS_WEB"
+        >
           <span
             class="button"
             @click="createFolders"
@@ -171,7 +173,7 @@
        * @return {void}
        */
       createFolders() {
-        if (process.env.IS_WEB) {
+        if (!process.env.IS_WEB) {
 
           this.$electron.ipcRenderer.send('create-folders');
           this.$electron.ipcRenderer.on('create-folders-response', (event, res) => {

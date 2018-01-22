@@ -72,7 +72,7 @@
           }
         };
 
-        if (process.env.IS_WEB){
+        if (!process.env.IS_WEB){
           this.$electron.ipcRenderer.send('edit-song', {
             songPath: song.path,
             type

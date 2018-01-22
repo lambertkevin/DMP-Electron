@@ -86,6 +86,19 @@
           set(isOpenState) {
             this.$store.commit('settings/setIsLookingForUnknownSongs', isOpenState);
           }
+        },
+
+        /**
+         * Modify the path to make it possible to open in Electron bundle
+         *
+         * @return {void}
+         */
+        path() {
+          if (!process.env.IS_WEB) {
+            return this.dance.path ? `file://${this.dance.path}` : null;
+          } else {
+            return this.dance.path ? this.dance.path.replace(this.localPath, 'music') : null;
+          }
         }
       },
 
