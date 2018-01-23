@@ -39,6 +39,15 @@
         } else {
           return this.dance.path ? this.dance.path.replace(this.localPath, 'music') : null;
         }
+      },
+
+      /**
+       * Return the playing song's dance type
+       *
+       * @return {void}
+       */
+      danceType() {
+        return this.dance.meta ? this.dance.meta[0].type : null;
       }
     },
 
@@ -94,14 +103,21 @@
         const audioApi = this.$refs.audioApi;
   
         const stopMusic = () => {
-          const musicDuration = this.musicDuration - this.$store.state.musicPlayer.fadeDuration;
-          if (
-            audioApi.currentTime > musicDuration
-            && !audioApi.paused
-            && !this.$store.state.musicPlayer.isFading
-          ) {
-            this.fadeOut();
+          const musicDuration = this.danceType !== 'pasodoble'
+          ? this.musicDuration - this.$store.state.musicPlayer.fadeDuration
+          : this.getExplosions(this.dance)[0];
+
+          console.log(this.dance.name, this.getExplosions(this.dance));
+
+          if (audioApi.currentTime > musicDuration && !audioApi.paused) {
+
+            if (!this.$store.state.musicPlayer.isFading && this.danceType !== 'pasodoble') {
+              this.fadeOut();
+            } else if (this.danceType === 'pasodoble') {
+              audioApi.pause();
+            }
             audioApi.removeEventListener('timeupdate', stopMusic);
+  
           }
         };
 
@@ -132,6 +148,16 @@
         player.on('volumechange', () => {
           this.setVolume(player.getVolume());
         });
+      },
+
+      getExplosions(song) {
+        return song.name.split(/(\[clashes .*\])/)[1]
+          .replace(/[\[(clashes)\]]/g, '')
+          .split('|')
+          .map(explosionString => {
+            const explosionTimeArra = explosionString.split('m');
+            return (parseInt(explosionTimeArra[0], 10) * 60) + parseFloat(explosionTimeArra[1], 10);
+          });
       }
     },
 

@@ -160,7 +160,7 @@
        */
       checkForUnkownSongs() {
         const unknownSongs = this.$store.getters['timetable/getUnknownSongs'];
-        this.$store.commit('settings/setIsLookingForUnknownSongs', unknownSongs.length > 1);
+        this.$store.commit('settings/setIsLookingForUnknownSongs', unknownSongs.length >= 1);
         this.$store.commit('timetable/setUnknownSongs', unknownSongs);
         this.toggleSettings();
       },

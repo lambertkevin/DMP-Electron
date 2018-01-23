@@ -90,7 +90,7 @@ exports.musicTypes = {
         'paso doble',
         'pd',
         'espana cani',
-        'gipsy'
+        'spanish gispy'
       ],
       bpms: [
         59,
