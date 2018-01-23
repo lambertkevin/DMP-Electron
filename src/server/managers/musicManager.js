@@ -49,7 +49,13 @@ export default {
     };
 
     musicTypesEntries.forEach((type) => {
-      const nameModifier = songName => songName.toLowerCase().replace(/(\[(clashes).*\])/g, '');
+      const nameModifier = songName =>
+        songName.toLowerCase()
+          // removes [clashes ...] to avoid detecting clash timing in pasodoble
+          .replace(/(\[(clashes).*\])/g, '')
+          // removes 1 or 2 digits at the begining (if there are there)
+          // to avoid detecting tracklist number
+          .replace(/^[1-9]{1,2}\s*-*/g, '');
       const { titles, bpms } = musicTypes[roundType][type];
       const titleMatch = titles.some(title => nameModifier(name).toLowerCase().includes(title));
       const bpmMatch = bpms.some(bpm => nameModifier(name).toLowerCase().includes(bpm));
@@ -66,8 +72,6 @@ export default {
           probability: [titleMatch, bpmMatch].reduce((oldVal, val) => oldVal + (val ? 1 : 0))
         });
       }
-
-      console.log(songInfos);
     });
 
     // If the song has more than one possible type, filter to keep only the high probability (>= 2)
