@@ -1,0 +1,3 @@
+[submodule "dist/server"]
+	path = dist/server
+	url = https://github.com/kvinlambert/DMP-Socket.git
