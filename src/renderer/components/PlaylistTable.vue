@@ -3,7 +3,7 @@
     <div
       class="playlist-table__container relative"
     >
-      <table class="grid-container">
+      <table>
         <playlist-table-row
           v-for="(row, index) in rounds"
           :key="index"

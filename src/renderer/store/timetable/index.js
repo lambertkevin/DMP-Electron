@@ -45,16 +45,8 @@ export default {
      */
     setRoundIsDone(state, payload) {
       const { round, isDone } = payload;
-      if (isDone) {
-        const stateRound = state.rounds.find(el => el.id === round.id);
-        const stateRoundsWithPrevious = [...state.rounds].splice(0, state.rounds.indexOf(stateRound) + 1);
-        stateRoundsWithPrevious.forEach((el) => {
-          el.isDone = true;
-        });
-      } else {
-        const stateRound = state.rounds.find(el => el.id === round.id);
-        stateRound.isDone = isDone;
-      }
+      const stateRound = state.rounds.find(el => el.id === round.id);
+      stateRound.isDone = isDone;
     },
 
     clearRounds(state) {
