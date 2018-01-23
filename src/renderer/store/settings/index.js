@@ -6,6 +6,7 @@ export default {
     isOpen: false,
     isHover: false,
     musicTypes: {},
+    clashes: 2,
     localPath: ''
   },
 
@@ -28,6 +29,10 @@ export default {
 
     setLocalPath(state, payload) {
       state.localPath = payload;
+    },
+
+    setClashes(state, payload) {
+      state.clashes = payload === 3 ? 3 : 2;
     }
   },
 

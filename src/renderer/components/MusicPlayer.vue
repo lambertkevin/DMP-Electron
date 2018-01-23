@@ -25,7 +25,8 @@
       ]),
 
       ...mapState('settings', [
-        'localPath'
+        'localPath',
+        'clashes'
       ]),
 
       /**
@@ -103,21 +104,24 @@
         const audioApi = this.$refs.audioApi;
   
         const stopMusic = () => {
-          const musicDuration = this.danceType !== 'pasodoble'
-          ? this.musicDuration - this.$store.state.musicPlayer.fadeDuration
-          : this.getExplosions(this.dance)[0];
-
-          console.log(this.dance.name, this.getExplosions(this.dance));
+          let musicDuration;
+          if (this.danceType !== 'pasodoble') {
+            musicDuration = this.musicDuration - this.$store.state.musicPlayer.fadeDuration;
+          } else {
+            const explosions = this.getExplosions(this.dance);
+            musicDuration = explosions.length > 1 ? explosions[this.clashes - 2] : explosions[0]
+          }
 
           if (audioApi.currentTime > musicDuration && !audioApi.paused) {
 
             if (!this.$store.state.musicPlayer.isFading && this.danceType !== 'pasodoble') {
               this.fadeOut();
             } else if (this.danceType === 'pasodoble') {
-              audioApi.pause();
+              this.$store.commit('musicPlayer/setIsPlaying', false);
+              this.$store.commit('musicPlayer/setIsFading', false);
+              this.$store.commit('musicPlayer/setDanceIsDone', true);
             }
             audioApi.removeEventListener('timeupdate', stopMusic);
-  
           }
         };
 

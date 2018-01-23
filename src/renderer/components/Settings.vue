@@ -83,6 +83,17 @@
             </span>
           </span>
         </div>
+        <div>
+          <div class="settings__panel__content__radio">
+            <div class="settings__panel__content__radio__text">
+            Pasodoble clashes
+            </div>
+            <input type="radio" v-model="clashes" :value="2" id="pasodoble-clashes-2" name="pasodoble-clashes" checked>
+            <label for="pasodoble-clashes-2">2</label>
+            <input type="radio" v-model="clashes" :value="3" id="pasodoble-clashes-3" name="pasodoble-clashes">
+            <label for="pasodoble-clashes-3">3</label>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -112,6 +123,16 @@
         },
         set(val) {
           this.$store.commit('settings/setIsHover', val);
+        }
+      },
+
+      clashes: {
+        get() {
+          return this.$store.state.settings.clashes;
+        },
+
+        set(val) {
+          this.$store.commit('settings/setClashes', val);
         }
       }
     },
@@ -273,6 +294,34 @@
           &:last-child{
             .button{
               margin-bottom: 0;
+            }
+          }
+        }
+
+        &__radio{
+          font-family: $nexa;
+          font-size: rem-calc(8);
+          text-transform: uppercase;
+          letter-spacing: rem-calc(1);
+
+
+          label{
+            display: inline-block;
+            width: 45%;
+            text-align: center;
+            font-size: rem-calc(8);
+            margin: 0;
+
+            &:last-child{
+              float: right;
+            }
+          }
+
+          input[type=radio] {
+            display: none;
+            
+            &:checked + label{
+              border:1px solid $light-gray;
             }
           }
         }
