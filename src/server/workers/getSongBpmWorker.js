@@ -11,7 +11,6 @@
 
 const fs = require('fs');
 const MusicTempo = require('music-tempo');
-const log = require('electron-log');
 const { AudioContext } = require('web-audio-api');
 
 const songUuid = process.argv[2];
