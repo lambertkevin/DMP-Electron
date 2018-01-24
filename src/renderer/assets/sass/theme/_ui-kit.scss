@@ -6,12 +6,15 @@
   color: $black;
   white-space: nowrap;
   text-align: left;
-  border: 1px solid $light-gray;
+  border: 1px solid rgba(smart-scale($black, 15%), 0.15);
   text-transform: uppercase;
   letter-spacing: rem-calc(1);
+  border-radius: rem-calc(2);
+  transition: all 0.3s ease;
 
   &:hover{
-    background: $light-gray;
+    background: smart-scale($black, 15%);
+    text-shadow: 0 2px 2px rgba($black, 0.5);  
   }
 
   [uk-icon]{

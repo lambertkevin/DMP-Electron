@@ -350,11 +350,14 @@
             width: 45%;
             text-align: center;
             font-size: rem-calc(8);
-            border: 1px solid transparent;
+            border: 1px solid rgba(smart-scale($black, 15%), 0.15);
             margin: 0;
+            border-radius: rem-calc(2);
+            transition: all 0.3s ease;
 
             &:hover{
-              border-color: rgba($light-gray, 0.5);
+              background: rgba($details, 1);
+              color: $white;
             }
 
             &:last-child{
@@ -366,7 +369,9 @@
             display: none;
             
             &:checked + label{
-              border-color: $light-gray;
+              background: smart-scale($black, 15%);
+              text-shadow: 0 2px 2px rgba($black, 0.5);
+              color: $white;  
             }
           }
         }
