@@ -1,7 +1,7 @@
 import path from 'path';
 import jsonfile from 'jsonfile';
 import log from 'electron-log';
-import { ipcMain } from 'electron';// eslint-disable-line
+import { ipcMain } from 'electron'; // eslint-disable-line
 import { musicDir, musicTypes } from '../server/config';
 import fileManager from '../server/managers/fileManager';
 import timingManager from '../server/managers/timingManager';
