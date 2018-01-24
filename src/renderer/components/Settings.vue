@@ -39,6 +39,30 @@
       }"
     >
       <div class="settings__panel__content">
+        <div 
+          v-if='!isWeb'
+        >
+          <span
+            class="button"
+            @click="openInitialFolder"
+          >
+            <span uk-icon="icon: folder; ratio: 0.5"></span>
+            <span class="button__text">
+              Open DMP folder
+            </span>
+          </span>
+        </div>
+        <div>
+          <span
+            class="button"
+            @click="createFolders"
+          >
+            <span uk-icon="icon: folder; ratio: 0.5"></span>
+            <span class="button__text">
+              Create rounds folders
+            </span>
+          </span>
+        </div>
         <div>
           <span
             class="button"
@@ -57,7 +81,7 @@
           >
             <span uk-icon="icon: refresh; ratio: 0.5"></span>
             <span class="button__text">
-              Regenerate timetable
+              Generate timetable
             </span>
           </span>
         </div>
@@ -72,17 +96,7 @@
             </span>
           </span>
         </div>
-        <div>
-          <span
-            class="button"
-            @click="createFolders"
-          >
-            <span uk-icon="icon: folder; ratio: 0.5"></span>
-            <span class="button__text">
-              Create folders
-            </span>
-          </span>
-        </div>
+        <br/>
         <div>
           <div class="settings__panel__content__radio">
             <div class="settings__panel__content__radio__text">
@@ -100,10 +114,18 @@
 </template>
 
 <script>
+  import childProcess from 'child_process';
+  import { mapState } from 'vuex';
+
   export default {
     name: 'Settings',
 
     computed: {
+
+      ...mapState('settings', [
+        'localPath'
+      ]),
+
       text() {
         return this.isOpen ? 'close' : 'settings';
       },
@@ -134,6 +156,10 @@
         set(val) {
           this.$store.commit('settings/setClashes', val);
         }
+      },
+
+      isWeb() {
+        return process.env.IS_WEB;
       }
     },
 
@@ -198,6 +224,7 @@
           this.$electron.ipcRenderer.on('create-folders-response', (event, res) => {
             if (res.code === 200) {
               console.log('Folder created');
+              childProcess.exec(`open ${this.localPath}`);
             } else {
               console.error(res.error);
             }
@@ -217,6 +244,15 @@
           });
   
         }
+      },
+
+      /**
+       * Open the path containing the music and timing
+       *
+       * @return {void}
+       */
+      openInitialFolder() {
+        childProcess.exec(`open ${this.localPath}`);
       }
     }
   };
@@ -304,13 +340,22 @@
           text-transform: uppercase;
           letter-spacing: rem-calc(1);
 
+          &__text{
+            margin-bottom: rem-calc(8);
+          }
+
 
           label{
             display: inline-block;
             width: 45%;
             text-align: center;
             font-size: rem-calc(8);
+            border: 1px solid transparent;
             margin: 0;
+
+            &:hover{
+              border-color: rgba($light-gray, 0.5);
+            }
 
             &:last-child{
               float: right;
@@ -321,7 +366,7 @@
             display: none;
             
             &:checked + label{
-              border:1px solid $light-gray;
+              border-color: $light-gray;
             }
           }
         }
