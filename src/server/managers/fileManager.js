@@ -161,7 +161,12 @@ export default {
       const fileDirectory = path.dirname(filePath);
       const newFileName = actualFileName.replace(fileExt, ` ${textToAdd}${fileExt}`);
 
-      fs.renameSync(filePath, path.join(fileDirectory, newFileName));
+      try {
+        fs.renameSync(filePath, path.join(fileDirectory, newFileName));
+      } catch (err) {
+        console.error(err);
+        return 500;
+      }
       return 200;
     }
     return 404;

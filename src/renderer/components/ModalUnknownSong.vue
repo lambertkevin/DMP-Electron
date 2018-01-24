@@ -1,59 +1,67 @@
 <template>
-  <div
-    v-if="isOpen && songs.length"
-    class="modal-unknown-song text-center"
-  >
-    <div class="grid-x full-height align-center">
-      <div class="small-8 cell align-self-middle">
-        <div class="modal-unknown-song__content box-shadow">
-          <h2>Of what kind is this song?</h2>
-          <hr/>
-          <div
-            class="modal-unknown-song__slider"
-            ref="slider"
-            uk-slideshow
-          >
-            <div class="modal-unknown-song__slider__controls">
-              <a
-                class="modal-unknown-song__slider__controls__previous uk-position-center-left uk-position-small uk-hidden-hover"
-                href="#"
-                uk-slidenav-previous
-                uk-slideshow-item="previous"></a>
-              <a
-                class="modal-unknown-song__slider__controls__next uk-position-center-right uk-position-small uk-hidden-hover"
-                href="#"
-                uk-slidenav-next
-                uk-slideshow-item="next"></a>
+  <transition name="fade">
+    <div
+      v-if="isOpen && songs.length"
+      class="modal-unknown-song text-center"
+    >
+      <div 
+        class="modal-unknown-song__close"
+        @click="isOpen = false"
+      >
+        <span uk-icon="icon: close"></span>
+      </div>
+      <div class="grid-x full-height align-center">
+        <div class="small-8 cell align-self-middle">
+          <div class="modal-unknown-song__content box-shadow">
+            <h2>Of what kind is this song?</h2>
+            <hr/>
+            <div
+              class="modal-unknown-song__slider"
+              ref="slider"
+              uk-slideshow
+            >
+              <div class="modal-unknown-song__slider__controls">
+                <a
+                  class="modal-unknown-song__slider__controls__previous uk-position-center-left uk-position-small uk-hidden-hover"
+                  href="#"
+                  uk-slidenav-previous
+                  uk-slideshow-item="previous"></a>
+                <a
+                  class="modal-unknown-song__slider__controls__next uk-position-center-right uk-position-small uk-hidden-hover"
+                  href="#"
+                  uk-slidenav-next
+                  uk-slideshow-item="next"></a>
+              </div>
+              <ul class="modal-unknown-song__slider__slides uk-slideshow-items">
+                <li
+                  v-for="(song, index) in songs"
+                  :key="index"
+                  class="modal-unknown-song__slider__slide"
+                  :class="{
+                    'is-active': index === 0
+                  }"
+                >
+                  <div class="grid-x align-center full-height">
+                    <div class="modal-unknown-song__player cell small-16">
+                      <audio
+                        :src="getPath(song)"
+                        controls
+                      ></audio>
+                    </div>
+                    <div class="modal-unknown-song__options cell small-16">
+                      <music-type-buttons
+                        :song="song"
+                      ></music-type-buttons>
+                    </div>
+                  </div>
+                </li>
+              </ul>
             </div>
-            <ul class="modal-unknown-song__slider__slides uk-slideshow-items">
-              <li
-                v-for="(song, index) in songs"
-                :key="index"
-                class="modal-unknown-song__slider__slide"
-                :class="{
-                  'is-active': index === 0
-                }"
-              >
-                <div class="grid-x align-center full-height">
-                  <div class="modal-unknown-song__player cell small-16">
-                    <audio
-                      :src="getPath(song)"
-                      controls
-                    ></audio>
-                  </div>
-                  <div class="modal-unknown-song__options cell small-16">
-                    <music-type-buttons
-                      :song="song"
-                    ></music-type-buttons>
-                  </div>
-                </div>
-              </li>
-            </ul>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
   <script>
@@ -176,14 +184,21 @@
   */
   .modal-unknown-song {
     position: fixed;
-    background: rgba($black, 0.75);
+    background: rgba($black, 0.95);
     height: 100vh;
     width: 100vw;
     z-index: 10;
     top: 0;
 
+    &__close{
+      color: $white;
+      position: absolute;
+      top: rem-calc(15);
+      right: rem-calc(15);
+    }
+
     &__content{
-      padding: 5%;
+      padding: 4%;
       background: white;
     }
 

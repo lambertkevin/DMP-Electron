@@ -123,6 +123,10 @@
     height: 100%;
   }
 
+  ::-webkit-scrollbar { 
+    display: none; 
+  }
+
   /**
    * SMALL UP
    */

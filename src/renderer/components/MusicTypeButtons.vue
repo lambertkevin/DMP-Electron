@@ -68,7 +68,7 @@
 
           } else if (res.code === 404) {
             alert('Error 404');
-            console.log(res.error);
+            console.log(res);
           }
         };
 

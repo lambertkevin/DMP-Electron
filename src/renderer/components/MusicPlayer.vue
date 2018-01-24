@@ -246,10 +246,19 @@
   .music-player {
 
     .plyr{
-      $notBlackColor: $turquoise;
+      $notBlackColor: $green;
       
       &__time{
-        color: smart-scale($black, -20%);
+        color: smart-scale($black, -27%);
+        font-weight: 600;
+      }
+
+      input[type=range] {
+        &:active{
+          &::-webkit-slider-thumb{
+            background: $notBlackColor;
+          }
+        }
       }
 
       &--audio{
