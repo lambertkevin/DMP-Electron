@@ -40,7 +40,7 @@
       this.$store.commit('musicPlayer/setDance', {});
       this.$store.commit('musicPlayer/setIsPlaying', false);
 
-      if (!this.rounds.length) {
+      if (!this.rounds.length || process.env.IS_WEB) {
         this.$store.dispatch('timetable/getTimetable');
       }
     }
