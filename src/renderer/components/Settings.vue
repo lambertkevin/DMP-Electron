@@ -114,7 +114,6 @@
 </template>
 
 <script>
-  import childProcess from 'child_process';
   import { mapState } from 'vuex';
 
   export default {
@@ -219,6 +218,7 @@
        */
       createFolders() {
         if (!process.env.IS_WEB) {
+          const childProcess = require('child_process');
 
           this.$electron.ipcRenderer.send('create-folders');
           this.$electron.ipcRenderer.on('create-folders-response', (event, res) => {
