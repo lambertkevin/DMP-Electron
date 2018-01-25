@@ -282,10 +282,26 @@
       }
 
       &__progress, &__volume{
-        &--buffer, &--played, &--display{
+        $backgroundColor: smart-scale($details, -40%);
+
+        &--display{
           color: $notBlackColor;
-          background: smart-scale($details, -40%);
+          background: $backgroundColor;
           overflow: hidden;
+        }
+
+        &--buffer{
+          background: $backgroundColor;
+          &::-webkit-progress-value{
+            background: rgba($light-gray, 0.1);
+          }
+        }
+
+        &--played{
+          background: transparent;
+          &::-webkit-progress-value{
+            background: $notBlackColor;
+          }
         }
       }
     }
