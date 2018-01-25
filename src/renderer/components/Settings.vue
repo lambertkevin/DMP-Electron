@@ -252,7 +252,10 @@
        * @return {void}
        */
       openInitialFolder() {
-        childProcess.exec(`open ${this.localPath}`);
+        if (!process.env.IS_WEB) {
+          const childProcess = require('child_process');
+          childProcess.exec(`open ${this.localPath}`);
+        }
       }
     }
   };
