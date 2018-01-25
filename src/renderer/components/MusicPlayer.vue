@@ -15,6 +15,12 @@
   export default {
     name: 'MusicPlayer',
 
+    data() {
+      return {
+        plyrVolumeDOM: null
+      }
+    },
+
     computed: {
       ...mapState('musicPlayer', [
         'dance',
@@ -69,14 +75,10 @@
        */
       playMusic() {
         const audioApi = this.$refs.audioApi;
-        const player = plyr.get('.plyr')[0];
-
+  
         audioApi.pause();
         audioApi.currentTime = 0;
         this.setDanceIsDone(false);
-        if (player.isMuted()) {
-          player.toggleMute();
-        }
         if (!this.volume){
           this.setVolume(1);
         }
@@ -154,6 +156,12 @@
         });
       },
 
+      /**
+       * Parse the song name to get the timing inside the "[clashes ...]" marks
+       *
+       * @param {Object} song
+       * @return {Array}
+       */
       getExplosions(song) {
         return song.name.split(/(\[clashes .*\])/)[1]
           .replace(/[\[(clashes)\]]/g, '')
@@ -162,6 +170,12 @@
             const explosionTimeArra = explosionString.split('m');
             return (parseInt(explosionTimeArra[0], 10) * 60) + parseFloat(explosionTimeArra[1], 10);
           });
+      },
+
+      setPlyrVolume(volume) {
+        const player = plyr.get('.plyr')[0];
+        player.setVolume(this.volume * 10);
+        this.plyrVolumeDOM.value = this.volume * 10;
       }
     },
 
@@ -200,9 +214,8 @@
        * @return {void}
        */
       volume() {
-        const player = plyr.get('.plyr')[0];
-        player.setVolume(this.volume * 10);
         this.$refs.audioApi.volume = this.volume;
+        this.setPlyrVolume(this.volume);
       },
 
       /**
@@ -230,7 +243,10 @@
      * @return {void}
      */
     mounted() {
-      plyr.setup(this.$refs.audioApi);
+      const players = plyr.setup(this.$refs.audioApi);
+      this.plyrVolumeDOM = document.querySelectorAll('[data-plyr=volume]')[0];
+
+      this.setPlyrVolume(this.volume * 10);
       this.setTimeUpdateEvent();
       this.onPlyrVolumeChange();
     },
