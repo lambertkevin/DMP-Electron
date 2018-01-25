@@ -249,7 +249,7 @@
       $notBlackColor: $green;
       
       &__time{
-        color: smart-scale($black, -27%);
+        color: $light-gray;
         font-weight: 600;
       }
 
@@ -278,18 +278,13 @@
               }
             }
           }
-
-          &__progress{
-            &--buffer{
-              background: smart-scale($details, -40%);
-            }
-          }
         }
       }
 
       &__progress, &__volume{
-        &--played, &--display{
+        &--buffer, &--played, &--display{
           color: $notBlackColor;
+          background: smart-scale($details, -40%);
           overflow: hidden;
         }
       }

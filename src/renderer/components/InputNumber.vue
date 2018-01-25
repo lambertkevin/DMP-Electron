@@ -107,15 +107,16 @@
 
     &__text{
       font-size: rem-calc(12);
+      color: $light-gray;
     }
 
     &__sign{
       cursor: pointer;
-      color: $white;
+      color: $light-gray;
 
       span[uk-icon]{
         svg *{
-          stroke: white;
+          stroke: $light-gray;
         }
       }
     }
