@@ -172,6 +172,13 @@
           });
       },
 
+      /**
+       * Force DOM update of the plyr volume
+       * ~ Resolve bug with thumb not updating in input[type=range]
+       *
+       * @param {Number} volume
+       * @return {void}
+       */
       setPlyrVolume(volume) {
         const player = plyr.get('.plyr')[0];
         player.setVolume(this.volume * 10);
