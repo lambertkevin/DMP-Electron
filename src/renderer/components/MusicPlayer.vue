@@ -24,6 +24,7 @@
     computed: {
       ...mapState('musicPlayer', [
         'dance',
+        'isFading',
         'isPlaying',
         'volume',
         'musicDuration',
@@ -78,6 +79,7 @@
   
         audioApi.pause();
         audioApi.currentTime = 0;
+        this.$store.commit('musicPlayer/setIsFading', false);
         this.setDanceIsDone(false);
         if (!this.volume){
           this.setVolume(1);
@@ -116,12 +118,12 @@
 
           if (audioApi.currentTime > musicDuration && !audioApi.paused) {
 
-            if (!this.$store.state.musicPlayer.isFading && this.danceType !== 'pasodoble') {
+            if (!this.isFading && this.danceType !== 'pasodoble') {
               this.fadeOut();
             } else if (this.danceType === 'pasodoble') {
               this.$store.commit('musicPlayer/setIsPlaying', false);
               this.$store.commit('musicPlayer/setIsFading', false);
-              this.$store.commit('musicPlayer/setDanceIsDone', true);
+              this.setDanceIsDone(true);
             }
             audioApi.removeEventListener('timeupdate', stopMusic);
           }

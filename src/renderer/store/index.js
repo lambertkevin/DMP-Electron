@@ -9,7 +9,15 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   strict: true,
-  plugins: [VuexPersistedState()],
+  plugins: [VuexPersistedState({
+    paths: [
+      'musicPlayer.musicDuration',
+      'musicPlayer.fadeDuration',
+      'settings.clashes',
+      'timetable.unknownSongs',
+      'timetable.rounds'
+    ]
+  })],
   modules: {
     settings,
     musicPlayer,
