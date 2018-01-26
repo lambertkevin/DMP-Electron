@@ -21,6 +21,7 @@
               <input-number
                 class="small-16 cell"
                 :name="`musicDuration`"
+                :steps="5"
                 :time="musicDuration"
                 v-model="musicDuration"
               />
@@ -37,7 +38,6 @@
               <input-number
                 class="small-16 cell"
                 :name="`fadeDuration`"
-                :steps="1"
                 :time="fadeDuration"
                 v-model="fadeDuration"
               ></input-number>
