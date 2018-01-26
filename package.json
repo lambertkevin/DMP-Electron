@@ -1,6 +1,6 @@
 {
   "name": "dmp",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "Kevin Lambert <kvin.lambert@gmail.com",
   "description": "Dancesport Music Player",
   "license": null,
@@ -55,6 +55,7 @@
     }
   },
   "dependencies": {
+    "bluebird": "^3.5.1",
     "bpm-webworker": "git+https://github.com/kvinlambert/bpm-webworker.git",
     "directory-tree": "^2.0.0",
     "electron-debug": "^1.4.0",
