@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import mkdirp from 'mkdirp';
 import dirTree from 'directory-tree';
+import BbPromise from 'bluebird';
+import os from 'os';
 import musicManager from './musicManager';
 import { musicTypes, musicDir } from '../config';
 import { progress } from '../../main/ipc';
@@ -67,11 +69,15 @@ export default {
     const roundMetas = this.getRoundMetas(subdirPath);
     const tree = this.getTree(subdirPath);
     const { children } = tree;
+    // BlueBird Promise used for concurrency feature
+    const songPromises = BbPromise.map(children, song =>
+      musicManager.getSongType(roundMetas.type, song, event), {
+      concurrency: 2
+    });
 
     progress.totalSongs = this.getTotalSongs();
 
-    return Promise.all(children.map(song =>
-      musicManager.getSongType(roundMetas.type, song, event)))
+    return songPromises
       .then((result) => {
         const unknownSongTypes = result.filter(songInfos => songInfos.meta[0].type === 'unknown');
 
@@ -102,9 +108,11 @@ export default {
     const tree = this.getTree(_path);
     const { children } = tree;
     const dancesOrder = {};
-
-    const songsArrayPromise = Promise.all(tree.children.map(child =>
-      this.getArrayOfSongTypes(child.path, event)));
+    // BlueBird Promise used for concurrency feature
+    const songsArrayPromise = BbPromise.map(tree.children, child =>
+      this.getArrayOfSongTypes(child.path, event), {
+      concurrency: os.cpus().length
+    });
 
     const roundsArray = children.map((subdir, index) => {
       const roundMetas = this.getRoundMetas(subdir.path);
@@ -127,10 +135,12 @@ export default {
       };
     });
 
-    return songsArrayPromise.then(songsArray => songsArray.map((songs, index) => ({
-      ...roundsArray[index],
-      dances: songs.sort((a, b) => dancesOrder[a.meta[0].type] - dancesOrder[b.meta[0].type])
-    }))).catch(err => console.error(err));
+    return songsArrayPromise
+      .then(songsArray => songsArray.map((songs, index) => ({
+        ...roundsArray[index],
+        dances: songs.sort((a, b) => dancesOrder[a.meta[0].type] - dancesOrder[b.meta[0].type])
+      })))
+      .catch(err => console.error(err));
   },
 
 
