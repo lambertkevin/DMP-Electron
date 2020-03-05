@@ -1,7 +1,6 @@
 <template>
   <div class="footer full-width text-center">
     <div class="grid-x align-center full-height">
-
       <div class="cell small-14 medium-10 large-8 align-self-bottom">
         <div class="grid-x align-center">
           <div class="cell medium-16 large-13">
@@ -16,16 +15,14 @@
         <div class="grid-x">
           <div class="cell small-8 footer__element">
             <div class="grid-x align-center">
-
               <span class="small-16 cell footer__element__title"> Music duration: </span>
               <input-number
+                v-model="musicDuration"
                 class="small-16 cell"
                 :name="`musicDuration`"
                 :steps="5"
                 :time="musicDuration"
-                v-model="musicDuration"
               />
-
             </div>
           </div>
 
@@ -33,61 +30,57 @@
 
           <div class="cell small-8 footer__element">
             <div class="grid-x align-center footer__element__title">
-
               <span class="small-16 cell"> Fade duration: </span>
               <input-number
+                v-model="fadeDuration"
                 class="small-16 cell"
                 :name="`fadeDuration`"
                 :time="fadeDuration"
-                v-model="fadeDuration"
               ></input-number>
-
             </div>
           </div>
-
         </div>
       </div>
     </div>
   </div>
-
 </template>
 <script>
-  import MusicPlayer from '@/components/MusicPlayer';
-  import InputNumber from '@/components/InputNumber';
+import MusicPlayer from '@/components/MusicPlayer';
+import InputNumber from '@/components/InputNumber';
 
-  export default {
-    name: 'Footer',
+export default {
+  name: 'Footer',
 
-    components: {
-      MusicPlayer,
-      InputNumber
-    },
+  components: {
+    MusicPlayer,
+    InputNumber
+  },
 
-    data() {
-      return {};
-    },
+  data() {
+    return {};
+  },
 
-    computed: {
+  computed: {
 
-      musicDuration: {
-        get() {
-          return this.$store.state.musicPlayer.musicDuration;
-        },
-        set(value) {
-          this.$store.commit('musicPlayer/setMusicDuration', parseInt(value, 10));
-        }
+    musicDuration: {
+      get() {
+        return this.$store.state.musicPlayer.musicDuration;
       },
+      set(value) {
+        this.$store.commit('musicPlayer/setMusicDuration', parseInt(value, 10));
+      }
+    },
 
-      fadeDuration: {
-        get() {
-          return this.$store.state.musicPlayer.fadeDuration;
-        },
-        set(value) {
-          this.$store.commit('musicPlayer/setFadeDuration', parseInt(value, 10));
-        }
+    fadeDuration: {
+      get() {
+        return this.$store.state.musicPlayer.fadeDuration;
+      },
+      set(value) {
+        this.$store.commit('musicPlayer/setFadeDuration', parseInt(value, 10));
       }
     }
-  };
+  }
+};
 </script>
 
 <style lang="scss">

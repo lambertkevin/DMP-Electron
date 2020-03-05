@@ -15,10 +15,10 @@
       :class="{
         'settings__icon--black': isOpen
       }"
+      uk-icon="icon: cog; ratio: 0.7"
       @click="isOpen = !isOpen"
       @mouseenter="isHover = true"
       @mouseleave="isHover = false"
-      uk-icon="icon: cog; ratio: 0.7"
     ></span>
     <span
       v-show="isOpen"
@@ -26,10 +26,10 @@
       :class="{
         'settings__icon--black': isOpen
       }"
+      uk-icon="icon: close; ratio: 0.7"
       @click="isOpen = false"
       @mouseenter="isHover = true"
       @mouseleave="isHover = false"
-      uk-icon="icon: close; ratio: 0.7"
     >
     </span>
     <div
@@ -39,8 +39,8 @@
       }"
     >
       <div class="settings__panel__content">
-        <div 
-          v-if='!isWeb'
+        <div
+          v-if="!isWeb"
         >
           <span
             class="button"
@@ -96,15 +96,28 @@
             </span>
           </span>
         </div>
-        <br/>
+        <br />
         <div>
           <div class="settings__panel__content__radio">
             <div class="settings__panel__content__radio__text">
-            Pasodoble clashes
+              Pasodoble clashes
             </div>
-            <input type="radio" v-model="clashes" :value="2" id="pasodoble-clashes-2" name="pasodoble-clashes" checked>
+            <input
+              id="pasodoble-clashes-2"
+              v-model="clashes"
+              type="radio"
+              :value="2"
+              name="pasodoble-clashes"
+              checked
+            >
             <label for="pasodoble-clashes-2">2</label>
-            <input type="radio" v-model="clashes" :value="3" id="pasodoble-clashes-3" name="pasodoble-clashes">
+            <input
+              id="pasodoble-clashes-3"
+              v-model="clashes"
+              type="radio"
+              :value="3"
+              name="pasodoble-clashes"
+            >
             <label for="pasodoble-clashes-3">3</label>
           </div>
         </div>
@@ -114,151 +127,148 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
+import { mapState } from 'vuex';
 
-  export default {
-    name: 'Settings',
+export default {
+  name: 'Settings',
 
-    computed: {
+  computed: {
 
-      ...mapState('settings', [
-        'localPath'
-      ]),
+    ...mapState('settings', [
+      'localPath'
+    ]),
 
-      text() {
-        return this.isOpen ? 'close' : 'settings';
+    text() {
+      return this.isOpen ? 'close' : 'settings';
+    },
+
+    isOpen: {
+      get() {
+        return this.$store.state.settings.isOpen;
       },
-
-      isOpen: {
-        get() {
-          return this.$store.state.settings.isOpen;
-        },
-        set(val) {
-          this.$store.commit('settings/setIsOpen', val);
-        }
-      },
-
-      isHover: {
-        get() {
-          return this.$store.state.settings.isHover;
-        },
-        set(val) {
-          this.$store.commit('settings/setIsHover', val);
-        }
-      },
-
-      clashes: {
-        get() {
-          return this.$store.state.settings.clashes;
-        },
-
-        set(val) {
-          this.$store.commit('settings/setClashes', val);
-        }
-      },
-
-      isWeb() {
-        return process.env.IS_WEB;
+      set(val) {
+        this.$store.commit('settings/setIsOpen', val);
       }
     },
 
-    methods: {
-  
-      /**
+    isHover: {
+      get() {
+        return this.$store.state.settings.isHover;
+      },
+      set(val) {
+        this.$store.commit('settings/setIsHover', val);
+      }
+    },
+
+    clashes: {
+      get() {
+        return this.$store.state.settings.clashes;
+      },
+
+      set(val) {
+        this.$store.commit('settings/setClashes', val);
+      }
+    },
+
+    isWeb() {
+      return process.env.IS_WEB;
+    }
+  },
+
+  methods: {
+
+    /**
        * Toggle the isOpen state
        *
        * @return {void}
        */
-      toggleSettings() {
-        this.isOpen = !this.isOpen;
-      },
+    toggleSettings() {
+      this.isOpen = !this.isOpen;
+    },
 
-      /**
+    /**
        * Reset the timetable and set isDone to true for every song and round
        *
        * @return {void}
        */
-      reset() {
-        this.$store.commit('timetable/resetTimetable');
-        this.toggleSettings();
-        this.$store.commit('musicPlayer/setDance', {});
-        this.$store.commit('musicPlayer/setIsPlaying', false);
-      },
+    reset() {
+      this.$store.commit('timetable/resetTimetable');
+      this.toggleSettings();
+      this.$store.commit('musicPlayer/setDance', {});
+      this.$store.commit('musicPlayer/setIsPlaying', false);
+    },
 
-      /**
+    /**
        * Generate the timetable
        *
        * @return {void}
        */
-      generate() {
-        this.$store.commit('timetable/clearRounds');
-        this.$store.dispatch('timetable/generateTimetable');
-        this.toggleSettings();
-        this.$store.commit('musicPlayer/setDance', {});
-        this.$store.commit('musicPlayer/setIsPlaying', false);
-      },
+    generate() {
+      this.$store.commit('timetable/clearRounds');
+      this.$store.dispatch('timetable/generateTimetable');
+      this.toggleSettings();
+      this.$store.commit('musicPlayer/setDance', {});
+      this.$store.commit('musicPlayer/setIsPlaying', false);
+    },
 
-      /**
+    /**
        * Determine if there is songs that need to be recognized
        * because name and bpm failed
        *
        * @return {void}
        */
-      checkForUnkownSongs() {
-        const unknownSongs = this.$store.getters['timetable/getUnknownSongs'];
-        this.$store.commit('settings/setIsLookingForUnknownSongs', unknownSongs.length >= 1);
-        this.$store.commit('timetable/setUnknownSongs', unknownSongs);
-        this.toggleSettings();
-      },
+    checkForUnkownSongs() {
+      const unknownSongs = this.$store.getters['timetable/getUnknownSongs'];
+      this.$store.commit('settings/setIsLookingForUnknownSongs', unknownSongs.length >= 1);
+      this.$store.commit('timetable/setUnknownSongs', unknownSongs);
+      this.toggleSettings();
+    },
 
-      /**
+    /**
        * Create all the necessary folders to put the songs for each round
        *
        * @return {void}
        */
-      createFolders() {
-        if (!process.env.IS_WEB) {
-          const childProcess = require('child_process');
+    createFolders() {
+      if (!process.env.IS_WEB) {
+        const childProcess = require('child_process');
 
-          this.$electron.ipcRenderer.send('create-folders');
-          this.$electron.ipcRenderer.on('create-folders-response', (event, res) => {
-            if (res.code === 200) {
-              console.log('Folder created');
-              childProcess.exec(`open ${this.localPath}`);
-            } else {
-              console.error(res.error);
-            }
-            this.toggleSettings();
-          });
-  
-        } else {
+        this.$electron.ipcRenderer.send('create-folders');
+        this.$electron.ipcRenderer.on('create-folders-response', (event, res) => {
+          if (res.code === 200) {
+            console.log('Folder created');
+            childProcess.exec(`open ${this.localPath}`);
+          } else {
+            console.error(res.error);
+          }
+          this.toggleSettings();
+        });
+      } else {
+        this.$socket.emit('create-folders');
+        this.$socket.on('create-folders-response', (res) => {
+          if (res.code === 200) {
+            console.log('Folders created');
+          } else {
+            console.error(res.error);
+          }
+          this.toggleSettings();
+        });
+      }
+    },
 
-          this.$socket.emit('create-folders');
-          this.$socket.on('create-folders-response', (res) => {
-            if (res.code === 200) {
-              console.log('Folders created');
-            } else {
-              console.error(res.error);
-            }
-            this.toggleSettings();
-          });
-  
-        }
-      },
-
-      /**
+    /**
        * Open the path containing the music and timing
        *
        * @return {void}
        */
-      openInitialFolder() {
-        if (!process.env.IS_WEB) {
-          const childProcess = require('child_process');
-          childProcess.exec(`open ${this.localPath}`);
-        }
+    openInitialFolder() {
+      if (!process.env.IS_WEB) {
+        const childProcess = require('child_process');
+        childProcess.exec(`open ${this.localPath}`);
       }
     }
-  };
+  }
+};
 </script>
 
 <style lang="scss">
@@ -370,11 +380,11 @@
 
           input[type=radio] {
             display: none;
-            
+
             &:checked + label{
               background: smart-scale($black, 15%);
               text-shadow: 0 2px 2px rgba($black, 0.5);
-              color: $white;  
+              color: $white;
             }
           }
         }

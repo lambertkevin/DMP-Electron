@@ -3,11 +3,11 @@
     <div class="loading-spinner">
       <div class="loading-spinner__spinner"></div>
       <div class="loading-spinner__text">
-        It will take a few minutes... <br/>
-        <progress 
+        It will take a few minutes... <br />
+        <progress
           v-if="songsTreated"
-          class="uk-progress" 
-          :value="songsTreated" 
+          class="uk-progress"
+          :value="songsTreated"
           :max="totalSongs"
         >
         </progress>
@@ -17,50 +17,50 @@
 </template>
 
 <script>
-  export default {
-    name: 'LoadingSpinner',
+export default {
+  name: 'LoadingSpinner',
 
-    data() {
-      return {
-        songsTreated: 0,
-        totalSongs: 0
-      }
-    },
+  data() {
+    return {
+      songsTreated: 0,
+      totalSongs: 0
+    };
+  },
 
-    methods:{
-  
-      /**
+  methods: {
+
+    /**
        * Ipc receiving the progress of the generation of the timetable
        *
        * @return {void}
        */
-      getProgress() {
-        const updateProgress = (res) => {
-          this.songsTreated = res.songsTreated;
-          this.totalSongs = res.totalSongs;
-        };
+    getProgress() {
+      const updateProgress = (res) => {
+        this.songsTreated = res.songsTreated;
+        this.totalSongs = res.totalSongs;
+      };
 
-        if (!process.env.IS_WEB){
-          this.$electron.ipcRenderer.on('progress-update', (event, res) => {
-            updateProgress(res);
-          });
-        } else {
-          this.$socket.on('progress-update', (res) => {
-            updateProgress(res);
-          });
-        }
+      if (!process.env.IS_WEB) {
+        this.$electron.ipcRenderer.on('progress-update', (event, res) => {
+          updateProgress(res);
+        });
+      } else {
+        this.$socket.on('progress-update', (res) => {
+          updateProgress(res);
+        });
       }
-    },
+    }
+  },
 
-    /**
+  /**
      * Lifecycle
      *
      * @return {void}
      */
-    mounted() {
-      this.getProgress();
-    }
-  };
+  mounted() {
+    this.getProgress();
+  }
+};
 </script>
 
 <style lang="scss">

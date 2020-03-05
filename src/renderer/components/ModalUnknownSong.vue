@@ -4,7 +4,7 @@
       v-if="isOpen && songs.length"
       class="modal-unknown-song text-center"
     >
-      <div 
+      <div
         class="modal-unknown-song__close"
         @click="isOpen = false"
       >
@@ -14,10 +14,10 @@
         <div class="small-8 cell align-self-middle">
           <div class="modal-unknown-song__content box-shadow">
             <h2>Of what kind is this song?</h2>
-            <hr/>
+            <hr />
             <div
-              class="modal-unknown-song__slider"
               ref="slider"
+              class="modal-unknown-song__slider"
               uk-slideshow
             >
               <div class="modal-unknown-song__slider__controls">
@@ -25,12 +25,14 @@
                   class="modal-unknown-song__slider__controls__previous uk-position-center-left uk-position-small uk-hidden-hover"
                   href="#"
                   uk-slidenav-previous
-                  uk-slideshow-item="previous"></a>
+                  uk-slideshow-item="previous"
+                ></a>
                 <a
                   class="modal-unknown-song__slider__controls__next uk-position-center-right uk-position-small uk-hidden-hover"
                   href="#"
                   uk-slidenav-next
-                  uk-slideshow-item="next"></a>
+                  uk-slideshow-item="next"
+                ></a>
               </div>
               <ul class="modal-unknown-song__slider__slides uk-slideshow-items">
                 <li
@@ -64,118 +66,117 @@
   </transition>
 </template>
 
-  <script>
-    import { mapState } from 'vuex';
-    import musicTypeButtons from '@/components/MusicTypeButtons';
-    import UIkit from 'uikit';
+<script>
+import { mapState } from 'vuex';
+import musicTypeButtons from '@/components/MusicTypeButtons';
+import UIkit from 'uikit';
 
-    export default {
-      name: 'ModalUnknownSong',
+export default {
+  name: 'ModalUnknownSong',
 
-      components: {
-        musicTypeButtons
+  components: {
+    musicTypeButtons
+  },
+
+  computed: {
+
+    ...mapState('timetable', {
+      songs: state => state.unknownSongs
+    }),
+
+    ...mapState('settings', [
+      'localPath'
+    ]),
+
+    isOpen: {
+      get() {
+        return this.$store.state.settings.isLookingForUnknownSongs;
       },
 
-      computed: {
-    
-        ...mapState('timetable', {
-          songs: state => state.unknownSongs
-        }),
-    
-        ...mapState('settings', [
-          'localPath'
-        ]),
+      set(isOpenState) {
+        this.$store.commit('settings/setIsLookingForUnknownSongs', isOpenState);
+      }
+    }
+  },
 
-        isOpen: {
-          get() {
-            return this.$store.state.settings.isLookingForUnknownSongs;
-          },
+  methods: {
 
-          set(isOpenState) {
-            this.$store.commit('settings/setIsLookingForUnknownSongs', isOpenState);
-          }
-        }
-      },
-
-      methods: {
-
-        /**
+    /**
          * Modify the path to make it possible to open in Electron bundle
          *
          * @return {void}
          */
-        getPath(song) {
-          if (!process.env.IS_WEB) {
-            return song.path ? `file://${song.path}` : null;
-          } else {
-            return song.path ? song.path.replace(this.localPath, 'music') : null;
-          }
-        },
+    getPath(song) {
+      if (!process.env.IS_WEB) {
+        return song.path ? `file://${song.path}` : null;
+      }
+      return song.path ? song.path.replace(this.localPath, 'music') : null;
+    },
 
-        /**
+    /**
          * Get the unknown songs
          *
          * @return {void}
          */
-        setSongs() {
-          const unknownSongs = this.$store.getters['timetable/getUnknownSongs'];
-          this.$store.commit('settings/setIsLookingForUnknownSongs', true);
-          this.$store.commit('timetable/setUnknownSongs', unknownSongs);
-        },
+    setSongs() {
+      const unknownSongs = this.$store.getters['timetable/getUnknownSongs'];
+      this.$store.commit('settings/setIsLookingForUnknownSongs', true);
+      this.$store.commit('timetable/setUnknownSongs', unknownSongs);
+    },
 
-        /**
+    /**
          * Modify the path to make it readable from Electron build
          *
          * @param {Object} song
          * @return {void}
          */
-        path(song) {
-          return song.path ? `file://${song.path}` : null;
-        }
-      },
+    path(song) {
+      return song.path ? `file://${song.path}` : null;
+    }
+  },
 
-      watch: {
+  watch: {
 
-        /**
+    /**
          * Watch changes of isOpen to get the unknown songs
          *
          * @return {void}
          */
-        isOpen(isOpenState) {
-          if (isOpenState) {
-            this.setSongs();
-          }
-        },
+    isOpen(isOpenState) {
+      if (isOpenState) {
+        this.setSongs();
+      }
+    },
 
-        /**
+    /**
          * Watch changes of songs to close when all songs has been recognized
          *
          * @return {void}
          */
-        songs(songsState) {
-          if (!songsState.length) {
-            this.isOpen = false;
-          }
-        }
-      },
+    songs(songsState) {
+      if (!songsState.length) {
+        this.isOpen = false;
+      }
+    }
+  },
 
 
-      /**
+  /**
        * Lifecyle
        *
        * @return {void}
        */
-      mounted() {
-        if (this.isOpen) {
-          this.setSongs();
-        }
+  mounted() {
+    if (this.isOpen) {
+      this.setSongs();
+    }
 
-        UIkit.slideshow('[uk-slideshow]', {
-          finite: true
-        });
-      },
-    };
-  </script>
+    UIkit.slideshow('[uk-slideshow]', {
+      finite: true
+    });
+  }
+};
+</script>
 
   <style lang="scss">
 

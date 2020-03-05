@@ -21,78 +21,78 @@
 </template>
 
 <script>
-  import humanizeDuration from 'humanize-duration';
-  import _ from 'lodash';
-  import UIkit from 'uikit';
-  import Icons from 'uikit/dist/js/uikit-icons';
+import humanizeDuration from 'humanize-duration';
+import _ from 'lodash';
+import UIkit from 'uikit';
+import Icons from 'uikit/dist/js/uikit-icons';
 
-  UIkit.use(Icons);
+UIkit.use(Icons);
 
-  export default {
-    name: 'InputNumber',
+export default {
+  name: 'InputNumber',
 
-    props: {
-      name: {
-        type: String,
-        require: true,
-        default: ''
-      },
-
-      steps: {
-        type: Number,
-        default: 1
-      },
-
-      time: {
-        type: Number,
-        required: true,
-        default: 0
-      }
+  props: {
+    name: {
+      type: String,
+      require: true,
+      default: ''
     },
 
-    computed: {
-  
-      /**
+    steps: {
+      type: Number,
+      default: 1
+    },
+
+    time: {
+      type: Number,
+      required: true,
+      default: 0
+    }
+  },
+
+  computed: {
+
+    /**
        * Return readable time duration
        *
        * @return {String}
        */
-      humanizedTime() {
-        return humanizeDuration(this.time, {
-          language: 'en',
-          delimiter: ' ',
-          unitMeasures: {
-            m: 60,
-            s: 1
-          },
-          units: ['m', 's']
-        });
-      }
-    },
+    humanizedTime() {
+      return humanizeDuration(this.time, {
+        language: 'en',
+        delimiter: ' ',
+        unitMeasures: {
+          m: 60,
+          s: 1
+        },
+        units: ['m', 's']
+      });
+    }
+  },
 
-    methods: {
+  methods: {
 
-      /**
+    /**
        * Increment the input by given value
        *
        * @param {Number} value
        * @return {void}
        */
-      increment(value) {
-        this.$store.commit(`musicPlayer/set${_.upperFirst(this.name)}`, this.$store.state.musicPlayer[this.name] + value);
-      },
+    increment(value) {
+      this.$store.commit(`musicPlayer/set${_.upperFirst(this.name)}`, this.$store.state.musicPlayer[this.name] + value);
+    },
 
-      /**
+    /**
        * Decrement the input by given value
        *
        * @param {Number} value
        * @return {void}
        */
-      decrement(value) {
-        this.$store.commit(`musicPlayer/set${_.upperFirst(this.name)}`, this.$store.state.musicPlayer[this.name] - value);
-      }
+    decrement(value) {
+      this.$store.commit(`musicPlayer/set${_.upperFirst(this.name)}`, this.$store.state.musicPlayer[this.name] - value);
     }
-  };
+  }
+};
 </script>
 
 <style lang="scss">

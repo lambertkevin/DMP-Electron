@@ -3,54 +3,54 @@
 </template>
 
 <script>
-  export default {
-    name: 'Default',
+export default {
+  name: 'Default',
 
-    data() {
-      return {};
-    },
+  data() {
+    return {};
+  },
 
-    computed: {},
+  computed: {},
 
-    methods: {
+  methods: {
 
 
-      /**
+    /**
        * Method example
        *
        * @param  {String} paramName [default = defaultContent]
        * @return {Boolean}
        */
-      methodName(paramName = 'defaultContent') {
-        // Method logic
-        return paramName;
-      }
-    },
-
-
-    /**
-     * Lifecyle
-     *
-     * @return {void}
-     */
-    mounted() {
-      const $ = require('jquery');
-      $(this.$el).foundation();
-    },
-
-
-    /**
-     * Lifecyle
-     *
-     * @return {void}
-     */
-    destroyed() {
-      if (this.$el && this.$el.foundation) {
-        const $ = require('jquery');
-        $(this.$el).foundation('destroy');
-      }
+    methodName(paramName = 'defaultContent') {
+      // Method logic
+      return paramName;
     }
-  };
+  },
+
+
+  /**
+     * Lifecyle
+     *
+     * @return {void}
+     */
+  mounted() {
+    const $ = require('jquery');
+    $(this.$el).foundation();
+  },
+
+
+  /**
+     * Lifecyle
+     *
+     * @return {void}
+     */
+  destroyed() {
+    if (this.$el && this.$el.foundation) {
+      const $ = require('jquery');
+      $(this.$el).foundation('destroy');
+    }
+  }
+};
 </script>
 
 <style lang="scss">

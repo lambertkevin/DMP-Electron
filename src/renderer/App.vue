@@ -20,7 +20,10 @@
       <dmp-loading-spinner
         v-if="isLoading"
       ></dmp-loading-spinner>
-      <transition name="fade" appear>
+      <transition
+        name="fade"
+        appear
+      >
         <dmp-playlist-table
           v-if="!isLoading"
         ></dmp-playlist-table>
@@ -32,85 +35,85 @@
 </template>
 
 <script>
-  import 'script-loader!jquery';
-  import 'script-loader!what-input';
-  import { mapState } from 'vuex';
-  import Foundation from 'foundation-sites';
-  import DmpHeader from '@/components/Header';
-  import DmpSettings from '@/components/Settings';
-  import DmpLoadingSpinner from '@/components/LoadingSpinner';
-  import DmpPlaylistTable from '@/components/PlaylistTable';
-  import DmpModalUnknownSong from '@/components/ModalUnknownSong';
-  import DmpFooter from '@/components/Footer';
+import 'script-loader!jquery';
+import 'script-loader!what-input';
+import { mapState } from 'vuex';
+import Foundation from 'foundation-sites';
+import DmpHeader from '@/components/Header';
+import DmpSettings from '@/components/Settings';
+import DmpLoadingSpinner from '@/components/LoadingSpinner';
+import DmpPlaylistTable from '@/components/PlaylistTable';
+import DmpModalUnknownSong from '@/components/ModalUnknownSong';
+import DmpFooter from '@/components/Footer';
 
-  export default {
-    name: 'App',
+export default {
+  name: 'App',
 
-    components: {
-      DmpSettings,
-      DmpHeader,
-      DmpLoadingSpinner,
-      DmpPlaylistTable,
-      DmpModalUnknownSong,
-      DmpFooter
-    },
+  components: {
+    DmpSettings,
+    DmpHeader,
+    DmpLoadingSpinner,
+    DmpPlaylistTable,
+    DmpModalUnknownSong,
+    DmpFooter
+  },
 
-    computed: {
-      ...mapState('settings', {
-        areSettingsOpen: state => state.isOpen,
-        musicTypes: state => state.musicTypes,
-      }),
-      ...mapState('timetable', {
-        isLoading: state => state.isLoading
-      }),
+  computed: {
+    ...mapState('settings', {
+      areSettingsOpen: state => state.isOpen,
+      musicTypes: state => state.musicTypes
+    }),
+    ...mapState('timetable', {
+      isLoading: state => state.isLoading
+    }),
 
-      hasLoadedMusicType() {
-        if (this.musicTypes && Object.keys(this.musicTypes).length) {
-          return true;
-        }
-        return false;
+    hasLoadedMusicType() {
+      if (this.musicTypes && Object.keys(this.musicTypes).length) {
+        return true;
       }
-    },
+      return false;
+    }
+  },
 
-    methods: {
-      initFolder() {
-        const checkResponse = (response) => {
-          if (response.code === 200){
-            console.log('Init Folder Ok');
-            this.$store.commit('settings/setLocalPath', response.text);
-          } else {
-            console.error('ERROR MAMENE', response);
-          }
-        };
-
-        if (!process.env.IS_WEB) {
-          checkResponse(this.$electron.ipcRenderer.sendSync('init'));
+  methods: {
+    initFolder() {
+      const checkResponse = (response) => {
+        if (response.code === 200) {
+          console.log('Init Folder Ok');
+          this.$store.commit('settings/setLocalPath', response.text);
         } else {
-          this.$socket.emit('init', (res) => {
-            checkResponse(res);
-          })
+          console.error('ERROR MAMENE', response);
         }
+      };
+
+      if (!process.env.IS_WEB) {
+        checkResponse(this.$electron.ipcRenderer.sendSync('init'));
+      } else {
+        this.$socket.emit('init', (res) => {
+          checkResponse(res);
+        });
       }
-    },
+    }
+  },
 
 
-    created() {
-      this.$store.dispatch('settings/getMusicTypes');
-      this.initFolder();
-    },
+  created() {
+    this.$store.dispatch('settings/getMusicTypes');
+    this.initFolder();
+  },
 
-    /**
+  /**
      *
      * Lyfecyle
      *
      * @return {void}
      */
-    mounted() {
-      const $ = require('jquery');
-      Foundation.addToJquery($);
-      $(document).foundation();
-    }
-  };
+  mounted() {
+    const $ = require('jquery');
+    Foundation.addToJquery($);
+    $(document).foundation();
+  }
+};
 </script>
 
 
@@ -123,8 +126,8 @@
     height: 100%;
   }
 
-  ::-webkit-scrollbar { 
-    display: none; 
+  ::-webkit-scrollbar {
+    display: none;
   }
 
   /**

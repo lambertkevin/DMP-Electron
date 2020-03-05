@@ -4,9 +4,9 @@
     class="playlist-table__round__songs"
   >
     <div
-      class="playlist-table__round__songs__row"
       v-for="(song, index) in cat"
       :key="index"
+      class="playlist-table__round__songs__row"
     >
       <div
         class="playlist-table__round__songs__song text-center"
@@ -23,8 +23,8 @@
           <span uk-icon="icon: play-circle;"></span>
         </span>
         <span
-          class="no-bg"
           v-if="!getLinkTitle(song)"
+          class="no-bg"
         > &#10007;
         </span>
       </div>
@@ -33,69 +33,69 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
+import { mapState } from 'vuex';
 
-  export default {
-    name: 'PlaylistTableSongs',
+export default {
+  name: 'PlaylistTableSongs',
 
-    props: {
-      cat: {
-        type: Array,
-        required: true,
-        default: () => ([{
-          uuid: 0,
-          name: '??',
-          path: '??',
-          isDone: false,
-          meta: [
-            {
-              type: '??',
-              probability: 1
-            }
-          ]
-        }])
-      },
-
-      'cat-name': {
-        type: String,
-        required: true,
-        default: 'test'
-      }
+  props: {
+    cat: {
+      type: Array,
+      required: true,
+      default: () => ([{
+        uuid: 0,
+        name: '??',
+        path: '??',
+        isDone: false,
+        meta: [
+          {
+            type: '??',
+            probability: 1
+          }
+        ]
+      }])
     },
 
-    computed: {
-      ...mapState('musicPlayer', {
-        songPlaying: state => state.dance,
-        isPlaying: state => state.isPlaying
-      })
-    },
+    'cat-name': {
+      type: String,
+      required: true,
+      default: 'test'
+    }
+  },
 
-    methods: {
-  
-      /**
+  computed: {
+    ...mapState('musicPlayer', {
+      songPlaying: state => state.dance,
+      isPlaying: state => state.isPlaying
+    })
+  },
+
+  methods: {
+
+    /**
        * Get the name of the dance type to make it the title of the cell
        *
        * @param {Object}
        * @return {String|Boolean}
        */
-      getLinkTitle(song) {
-        if (Object.prototype.hasOwnProperty.call(song, 'meta') && song.meta.length) {
-          return song.meta[0].type;
-        }
-        return false;
-      },
+    getLinkTitle(song) {
+      if (Object.prototype.hasOwnProperty.call(song, 'meta') && song.meta.length) {
+        return song.meta[0].type;
+      }
+      return false;
+    },
 
-      /**
+    /**
        * Launch the given music
        *
        * @param {Object}
        * @return {void}
        */
-      launchMusic(dance) {
-        this.$store.commit('musicPlayer/setDance', dance);
-      }
+    launchMusic(dance) {
+      this.$store.commit('musicPlayer/setDance', dance);
     }
-  };
+  }
+};
 </script>
 
 <style lang="scss">

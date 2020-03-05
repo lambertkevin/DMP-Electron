@@ -15,36 +15,36 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
-  import PlaylistTableRow from '@/components/PlaylistTableRow';
+import { mapState } from 'vuex';
+import PlaylistTableRow from '@/components/PlaylistTableRow';
 
-  export default {
-    name: 'PlaylistTable',
+export default {
+  name: 'PlaylistTable',
 
-    components: {
-      PlaylistTableRow
-    },
+  components: {
+    PlaylistTableRow
+  },
 
-    computed: {
-      ...mapState('timetable', {
-        rounds: state => state.rounds
-      })
-    },
+  computed: {
+    ...mapState('timetable', {
+      rounds: state => state.rounds
+    })
+  },
 
-    /**
+  /**
      * Lifecyle
      *
      * @return {void}
      */
-    mounted() {
-      this.$store.commit('musicPlayer/setDance', {});
-      this.$store.commit('musicPlayer/setIsPlaying', false);
+  mounted() {
+    this.$store.commit('musicPlayer/setDance', {});
+    this.$store.commit('musicPlayer/setIsPlaying', false);
 
-      if (!this.rounds.length || process.env.IS_WEB) {
-        this.$store.dispatch('timetable/getTimetable');
-      }
+    if (!this.rounds.length || process.env.IS_WEB) {
+      this.$store.dispatch('timetable/getTimetable');
     }
-  };
+  }
+};
 </script>
 
 <style lang="scss">
