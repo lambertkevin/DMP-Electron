@@ -46,7 +46,7 @@
             class="button"
             @click="openInitialFolder"
           >
-            <span uk-icon="icon: folder; ratio: 0.5"></span>
+            <span uk-icon="icon: home; ratio: 0.66"></span>
             <span class="button__text">
               Open DMP folder
             </span>
@@ -57,7 +57,7 @@
             class="button"
             @click="createFolders"
           >
-            <span uk-icon="icon: folder; ratio: 0.5"></span>
+            <span uk-icon="icon: folder; ratio: 0.66"></span>
             <span class="button__text">
               Create rounds folders
             </span>
@@ -68,7 +68,7 @@
             class="button"
             @click="reset"
           >
-            <span uk-icon="icon: history; ratio: 0.5"></span>
+            <span uk-icon="icon: history; ratio: 0.66"></span>
             <span class="button__text">
               Reset rounds
             </span>
@@ -79,7 +79,7 @@
             class="button"
             @click="generate"
           >
-            <span uk-icon="icon: refresh; ratio: 0.5"></span>
+            <span uk-icon="icon: refresh; ratio: 0.66"></span>
             <span class="button__text">
               Generate timetable
             </span>
@@ -90,7 +90,7 @@
             class="button"
             @click="checkForUnkownSongs"
           >
-            <span uk-icon="icon: pencil; ratio: 0.5"></span>
+            <span uk-icon="icon: question; ratio: 0.66"></span>
             <span class="button__text">
               Check for unknown songs
             </span>
@@ -101,7 +101,7 @@
             class="button"
             @click="correctSong"
           >
-            <span uk-icon="icon: pencil; ratio: 0.5"></span>
+            <span uk-icon="icon: pencil; ratio: 0.66"></span>
             <span class="button__text">
               Correct a song
             </span>
@@ -316,8 +316,8 @@ export default {
       display: inline-block;
       font-weight: bold;
       text-transform: uppercase;
-      font-size: rem-calc(8);
-      letter-spacing: rem-calc(2);
+      font-size: rem-calc(9);
+      letter-spacing: rem-calc(3);
       vertical-align: middle;
       opacity: 0;
       transform: translateX(10px);
@@ -355,7 +355,7 @@ export default {
       top: -5px;
       right: -10px;
       z-index: -1;
-      width: 15.475rem;
+      width: rem-calc(300);
       padding: 2rem;
       border-bottom-left-radius: 5px;
       transform: scale(0);
@@ -420,6 +420,7 @@ export default {
 
       .button{
         width: 100%;
+        font-size: rem-calc(8);
       }
     }
 

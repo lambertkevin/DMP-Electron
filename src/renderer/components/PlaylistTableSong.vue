@@ -197,7 +197,7 @@ export default {
     }
 
     &--edit {
-      > span {
+      > span:not(.no-bg) {
         box-shadow: 0 0 0 2px $green inset;
       }
     }
