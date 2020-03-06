@@ -1,6 +1,6 @@
 <template>
   <div class="header text-center">
-    Championnat Régional 2018
+    Dancesport Music Player
   </div>
 </template>
 

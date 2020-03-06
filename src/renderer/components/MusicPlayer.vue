@@ -271,7 +271,7 @@ export default {
   .music-player {
 
     .plyr{
-      $notBlackColor: $green;
+      $notBlackColor: $blue;
 
       .button, button{
         border-radius: rem-calc(4);
@@ -285,7 +285,7 @@ export default {
       input[type=range] {
         &:active{
           &::-webkit-slider-thumb{
-            background: $notBlackColor;
+            background: $medium-gray;
           }
         }
       }
@@ -294,15 +294,20 @@ export default {
         background: none;
         border: none;
 
+         input[type='range']::-webkit-slider-runnable-track{
+          background-color: $dark-gray;
+        }
+
         .plyr{
           &__controls{
             background: none;
             border: none;
 
             button{
-              color: smart-scale($black, -20%);
+              color: smart-scale($dark-gray, -20%);
 
               &.tab-focus:focus, &:hover{
+                color: $white;
                 background: $notBlackColor;
               }
             }

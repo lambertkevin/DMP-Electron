@@ -32,6 +32,7 @@
         v-for="(songs, index) in dances"
         :key="index"
         :songs="songs"
+        :round="row"
         :cat-name="index"
       ></playlist-table-song>
       <td class="playlist-table__row__done">
@@ -183,9 +184,28 @@ export default {
    * SMALL
    */
   .playlist-table__row {
+    display: inline-table;
+    transform: scale(1);
+    border-bottom: 1px solid smart-scale($black, -12%);
+    
+    &:before {
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    &:nth-child(even){
+      background: rgba($dark-gray, 0.1);
+    }
 
     &--blink{
-      animation: blink 5s infinite;
+      &:before{
+        animation: blink 1.5s infinite;
+      }
     }
 
     &:last-child{
@@ -193,10 +213,11 @@ export default {
         border-bottom: none;
       }
     }
+    
 
     td{
       padding: rem-calc(10 0);
-      border-bottom: 1px solid smart-scale($black, -12%);
+      // border-bottom: 1px solid smart-scale($black, -12%);
       color: $white;
       font-weight: 500;
     }
@@ -205,7 +226,7 @@ export default {
       width: 8%;
       font-weight: 500;
       text-align: center;
-      background: $black;
+      // background: $black;
       color: $white;
       border-bottom-color: transparent !important;
     }
