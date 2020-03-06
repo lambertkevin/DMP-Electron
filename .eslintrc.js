@@ -29,6 +29,7 @@ module.exports = {
     'no-multi-assign': 0,
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'no-console': 'warn',
     'import/no-webpack-loader-syntax': 0,
     'comma-dangle': ['error', 'never'],
     'no-multi-spaces': 0,

@@ -19,6 +19,6 @@ module.exports = {
     'comma-dangle': ['error', 'never'],
     'no-multi-spaces': 0,
     'max-len': ['warn', 150],
-    'no-console': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'no-console': 'warn',
   }
 }
