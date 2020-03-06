@@ -9,14 +9,16 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import { mapState, mapMutations, mapActions } from 'vuex';
-import plyr from 'plyr';
+import Plyr from 'plyr';
 
 export default {
   name: 'MusicPlayer',
 
   data() {
     return {
+      player: null,
       plyrVolumeDOM: null
     };
   },
@@ -54,7 +56,7 @@ export default {
        * @return {void}
        */
     danceType() {
-      return this.dance.meta ? this.dance.meta[0].type : null;
+      return _.get(this.dance, ['types', 0,'type']);
     }
   },
 
@@ -80,9 +82,7 @@ export default {
       audioApi.currentTime = 0;
       this.$store.commit('musicPlayer/setIsFading', false);
       this.setDanceIsDone(false);
-      if (!this.volume) {
-        this.setVolume(1);
-      }
+      this.setVolume(1);
 
       audioApi.addEventListener('canplay', () =>
         audioApi.play()
@@ -149,10 +149,8 @@ export default {
        * @return {void}
        */
     onPlyrVolumeChange() {
-      const player = plyr.get('.plyr')[0];
-
-      player.on('volumechange', () => {
-        this.setVolume(player.getVolume());
+      this.player.on('volumechange', () => {
+        this.setVolume(this.player.volume);
       });
     },
 
@@ -180,8 +178,7 @@ export default {
        * @return {void}
        */
     setPlyrVolume(volume) {
-      const player = plyr.get('.plyr')[0];
-      player.setVolume(this.volume * 10);
+      this.player.volume = this.volume;
       this.plyrVolumeDOM.value = this.volume * 10;
     }
   },
@@ -250,8 +247,13 @@ export default {
      * @return {void}
      */
   mounted() {
-    const players = plyr.setup(this.$refs.audioApi);
-    this.plyrVolumeDOM = document.querySelectorAll('[data-plyr=volume]')[0];
+    this.player = new Plyr(this.$refs.audioApi, {
+      speed: {
+        selected: 1,
+        options: [0.90, 0.91, 0.92, 0.93, 0.94, 0.95, 1, 1.05, 1.06, 1.07, 1.08, 1.09, 1.1]
+      }
+    });
+    this.plyrVolumeDOM = this.player.elements.volume;
 
     this.setPlyrVolume(this.volume * 10);
     this.setTimeUpdateEvent();
@@ -261,7 +263,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "~plyr/src/scss/plyr";
+  @import "~plyr/src/sass/plyr";
 
   /**
    * SMALL
@@ -270,6 +272,10 @@ export default {
 
     .plyr{
       $notBlackColor: $green;
+
+      .button, button{
+        border-radius: rem-calc(4);
+      }
 
       &__time{
         color: $light-gray;
