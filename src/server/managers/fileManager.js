@@ -78,20 +78,7 @@ export default {
     progress.totalSongs = this.getTotalSongs();
 
     return songPromises
-      .then((result) => {
-        const unknownSongTypes = result.filter(songInfos => songInfos.meta[0].type === 'unknown');
-
-        if (unknownSongTypes.length === 1 && result.length === 5) {
-          const missingMusicType = musicManager.getTypeByDeduction(result, roundMetas.type);
-
-          unknownSongTypes[0].meta[0] = {
-            type: missingMusicType,
-            probability: 0.5
-          };
-        }
-
-        return result;
-      })
+      .then(result => result)
       .catch(error => ({ error }));
   },
 
@@ -111,7 +98,7 @@ export default {
     // BlueBird Promise used for concurrency feature
     const songsArrayPromise = BbPromise.map(tree.children, child =>
       this.getArrayOfSongTypes(child.path, event), {
-      concurrency: os.cpus().length
+      concurrency: (os.cpus().length - 1 || 1)
     });
 
     const roundsArray = children.map((subdir, index) => {
@@ -136,10 +123,17 @@ export default {
     });
 
     return songsArrayPromise
-      .then(songsArray => songsArray.map((songs, index) => ({
-        ...roundsArray[index],
-        dances: songs.sort((a, b) => dancesOrder[a.meta[0].type] - dancesOrder[b.meta[0].type])
-      })))
+      .then(songsArray =>
+        songsArray.map((songs, index) => {
+          if (!songs.length) {
+            console.log(songs);
+          }
+
+          return {
+            ...roundsArray[index],
+            dances: songs.length ? songs.sort((a, b) => dancesOrder[a.types[0].type] - dancesOrder[b.types[0].type]) : []
+          };
+        }))
       .catch(err => console.error(err));
   },
 

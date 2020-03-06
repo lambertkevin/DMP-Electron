@@ -5,6 +5,7 @@ import { ipcMain } from 'electron'; // eslint-disable-line
 import { musicDir, musicTypes } from '../server/config';
 import fileManager from '../server/managers/fileManager';
 import timingManager from '../server/managers/timingManager';
+import { metadataApi } from '../server/managers/musicManager';
 
 export const progress = {
   songsTreated: 0,
@@ -20,13 +21,14 @@ export default () => {
     event.returnValue = musicTypes;
   });
 
-  ipcMain.on('edit-song', (event, args) => {
-    const { songPath, type } = args;
+  ipcMain.on('edit-song', async (event, args) => {
+    const { song, type } = args;
+    const metadata = { ...song.metadata, genre: type, comment: 'dmp' };
 
     try {
-      const responseCode = fileManager.addTextToFile(songPath, type);
+      await metadataApi.set(song, metadata);
       event.sender.send('edit-song-response', {
-        code: responseCode
+        code: 200
       });
     } catch (err) {
       event.sender.send('edit-song-response', {

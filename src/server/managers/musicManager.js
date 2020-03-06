@@ -1,12 +1,40 @@
 import fs from 'fs';
-import log from 'electron-log';
 import nodePath from 'path';
 import uuidv4 from 'uuid/v4';
+import log from 'electron-log';
+import memoize from 'fast-memoize';
+import ffmetadata from 'ffmetadata';
 import MusicTempo from 'music-tempo';
-import { AudioContext } from 'web-audio-api';
 import childProcess from 'child_process';
+import { AudioContext } from 'web-audio-api';
 import { musicTypes } from '../config';
 import { progress } from '../../main/ipc';
+
+export const metadataApi = {
+  get(song) {
+    return new Promise((resolve, reject) => {
+      ffmetadata.read(song.path, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  },
+
+  set(song, metadata) {
+    return new Promise((resolve, reject) => {
+      ffmetadata.write(song.path, metadata, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(song);
+        }
+      });
+    });
+  }
+};
 
 export default {
   /**
@@ -17,19 +45,43 @@ export default {
    * @param {Event} event
    * @return {Promise}
    */
-  getSongType(roundType, _song, event) {
-    const song = { uuid: uuidv4(), ..._song };
-    const typeByName = this.getTypeByTitle(roundType, song);
-
-    if (typeByName.meta[0].type !== 'unknown') {
-      progress.songsTreated += 1;
-      event.sender.send('progress-update', progress);
-      return Promise.resolve(typeByName);
+  async getSongType(roundType, _song, event) {
+    let metadata;
+    try {
+      metadata = await metadataApi.get(_song);
+    } catch (e) {
+      metadata = {};
     }
 
-    return this.getTypeByBpm(roundType, song, event);
-  },
 
+    const song = { uuid: uuidv4(), ..._song, metadata };
+
+    if (song.metadata.comment === 'dmp' && Object.keys(musicTypes[roundType]).includes(song.metadata.genre)) {
+      return {
+        ...song,
+        types: [{
+          type: song.metadata.genre,
+          probability: 100
+        }]
+      };
+    }
+
+    const typeByName = this.getTypeByTitle(roundType, song);
+
+    /** @DEPRECTED as it is very slow */
+    // if (typeByName.meta[0].type !== 'unknown') {
+    //   progress.songsTreated += 1;
+    //   event.sender.send('progress-update', progress);
+    //   return Promise.resolve(typeByName);
+    // }
+
+    // return this.getTypeByBpm(roundType, song, event);
+    /** @DEPRECATED as it is very slow */
+
+    progress.songsTreated += 1;
+    event.sender.send('progress-update', progress);
+    return typeByName;
+  },
 
   /**
    * Verify if the title of a song contains enough infos to determine its type
@@ -39,53 +91,57 @@ export default {
    * @return {Object}
    */
   getTypeByTitle(roundType, song) {
-    const { name, path, uuid } = song;
-    const musicTypesEntries = Object.keys(musicTypes[roundType]);
+    const {
+      name, path, metadata, uuid
+    } = song;
+    const musicTypesNames = Object.keys(musicTypes[roundType]);
     const songInfos = {
       uuid,
       name,
       path,
-      meta: this.resetMeta()
+      metadata,
+      types: this.resetSongTypes()
     };
 
-    musicTypesEntries.forEach((type) => {
-      const nameModifier = songName =>
-        songName.toLowerCase()
-          // removes [clashes ...] to avoid detecting clash timing in pasodoble
-          .replace(/(\[(clashes).*\])/g, '')
-          // removes 1 or 2 digits at the begining (if there are there)
-          // to avoid detecting tracklist number
-          .replace(/^[0-9]{1,2}/g, '')
-          // removes potential name "track 31" or else to avoid wrong bpm detection
-          .replace(/(track\s*[0-9]*)/g, '');
+    const nameModifier = memoize(songName => songName.toLowerCase()
+      // removes [clashes ...] to avoid detecting clash timing in pasodoble
+      .replace(/(\[(clashes).*\])/g, '')
+      // removes 1 or 2 digits at the begining (if there are there)
+      // to avoid detecting tracklist number
+      .replace(/^[0-9]{1,2}/g, '')
+      // removes potential name "track 31" or else to avoid wrong bpm detection
+      .replace(/(track\s*[0-9]*)/g, ''));
+
+    musicTypesNames.forEach((type) => {
       const { titles, bpms } = musicTypes[roundType][type];
-      const titleMatch = titles.some(title => nameModifier(name).toLowerCase().includes(title));
-      const bpmMatch = bpms.some(bpm => nameModifier(name).toLowerCase().includes(bpm));
+      const titleMatch = titles.some(title => nameModifier(metadata.title || '').includes(title));
+      const bpmMatch = bpms.some(bpm => nameModifier(name).includes(bpm));
+      const fileNameMatch = titles.some(title => nameModifier(name).includes(title));
 
       // If the song name contains an indicator either with the type name or bpm
-      if (titleMatch || bpmMatch) {
+      if (titleMatch || bpmMatch || fileNameMatch) {
         // If the meta are still containing the 'unknown' default object, remove it
-        if (songInfos.meta.some(meta => meta.type === 'unknown')) {
-          songInfos.meta = [];
+        if (songInfos.types.some(x => x.type === 'unknown')) {
+          songInfos.types = [];
         }
-        // Add the new possible metas
-        songInfos.meta.push({
-          type: titleMatch || bpmMatch ? type : null,
-          probability: [titleMatch, bpmMatch].reduce((oldVal, val) => oldVal + (val ? 1 : 0))
+        // Add the new possible types
+        songInfos.types.push({
+          type: titleMatch || fileNameMatch || bpmMatch ? type : null,
+          probability: [titleMatch, fileNameMatch, bpmMatch].reduce((oldVal, val) => oldVal + (val ? 1 : 0))
         });
       }
     });
 
     // If the song has more than one possible type, filter to keep only the high probability (>= 2)
-    if (songInfos.meta.length > 1) {
-      songInfos.meta = songInfos.meta.filter(meta => meta.probability >= 2);
+    if (songInfos.types.length > 1) {
+      songInfos.types = songInfos.types.filter(type => type.probability >= 2);
 
       /**
        * If all the type possible were at low probability,
        * just set the meta as unknown, to be handle by bpm
       */
-      if (!songInfos.meta.length) {
-        songInfos.meta = this.resetMeta();
+      if (!songInfos.types.length) {
+        songInfos.types = this.resetSongTypes();
       }
     }
 
@@ -96,19 +152,22 @@ export default {
   /**
    * Get the type of the music by checking its bpm
    *
+   * @deprecated
+   *
    * @param {String} roundType
    * @param {Object} song
    * @param {Event} event
+   *
    * @return {Promise}
    */
   getTypeByBpm(roundType, song, event) {
     const { name, path, uuid } = song;
-    const musicTypesEntries = Object.keys(musicTypes[roundType]);
+    const musicTypesNames = Object.keys(musicTypes[roundType]);
     const songInfos = {
       uuid,
       name,
       path,
-      meta: [
+      types: [
         {
           type: 'unknown',
           probability: 0
@@ -141,7 +200,8 @@ export default {
         event.sender.send('progress-update', progress);
         log.warn(songBpm, songUuid, song.uuid, song.name);
         console.log(songBpm, songUuid, song.uuid, song.name);
-        musicTypesEntries.forEach((type) => {
+
+        musicTypesNames.forEach((type) => {
           const { bpms } = musicTypes[roundType][type];
 
           const isMusicTypeContainingBpm = bpms.some((typeBpm) => {
@@ -152,19 +212,19 @@ export default {
 
           if (isMusicTypeContainingBpm) {
           // If the meta are still containing the 'unknown' default object, remove it
-            if (songInfos.meta.some(meta => meta.type === 'unknown')) {
-              songInfos.meta = [];
+            if (songInfos.types.some(meta => meta.type === 'unknown')) {
+              songInfos.types = [];
             }
-            // Add the new possible metas
-            songInfos.meta.push({
+            // Add the new possible type
+            songInfos.types.push({
               type,
               probability: 1
             });
           }
         });
 
-        if (songInfos.meta.length > 1) {
-          songInfos.meta = this.resetMeta();
+        if (songInfos.types.length > 1) {
+          songInfos.types = this.resetSongTypes();
         }
 
         resolve(songInfos);
@@ -180,9 +240,9 @@ export default {
    * @return {String}
    */
   getTypeByDeduction(round, roundType) {
-    const musicTypesEntries = Object.keys(musicTypes[roundType]);
-    const missingMusicType = musicTypesEntries.filter(musicType =>
-      round.map(song => (musicType === song.meta[0].type)).indexOf(true) === -1);
+    const musicTypesNames = Object.keys(musicTypes[roundType]);
+    const missingMusicType = musicTypesNames.filter(musicType =>
+      round.map(song => (musicType === song.types[0].type)).indexOf(true) === -1);
 
     return missingMusicType[0];
   },
@@ -218,7 +278,7 @@ export default {
     });
   },
 
-  resetMeta() {
+  resetSongTypes() {
     return [
       {
         type: 'unknown',
