@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'; // eslint-disable-line
+import { app, BrowserWindow } from 'electron' // eslint-disable-line
 import server from './ipc';
 
 /**
@@ -30,6 +30,17 @@ function createWindow() {
   });
 
   mainWindow.loadURL(winURL);
+
+  // Open dev tools initially when in development mode
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.on('dom-ready', () => {
+      mainWindow.webContents.once('devtools-opened', () => {
+        mainWindow.focus();
+      });
+      mainWindow.webContents.openDevTools();
+    });
+  }
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
@@ -50,3 +61,23 @@ app.on('activate', () => {
 });
 
 server();
+
+/**
+ * Auto Updater
+ *
+ * Uncomment the following code below and install `electron-updater` to
+ * support auto updating. Code Signing with a valid certificate is required.
+ * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
+ */
+
+/*
+import { autoUpdater } from 'electron-updater'
+
+autoUpdater.on('update-downloaded', () => {
+  autoUpdater.quitAndInstall()
+})
+
+app.on('ready', () => {
+  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
+})
+ */

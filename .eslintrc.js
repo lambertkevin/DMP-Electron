@@ -32,7 +32,7 @@ module.exports = {
     'import/no-webpack-loader-syntax': 0,
     'comma-dangle': ['error', 'never'],
     'no-multi-spaces': 0,
-    'max-len': ['error', 150],
+    'max-len': ['warn', 150],
     'no-underscore-dangle': 0,  
     // Vuex necessity
     "no-param-reassign": ['error', { 

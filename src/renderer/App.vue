@@ -35,8 +35,7 @@
 </template>
 
 <script>
-import 'script-loader!jquery';
-import 'script-loader!what-input';
+import $ from "jquery";
 import { mapState } from 'vuex';
 import Foundation from 'foundation-sites';
 import DmpHeader from '@/components/Header';
@@ -109,7 +108,6 @@ export default {
      * @return {void}
      */
   mounted() {
-    const $ = require('jquery');
     Foundation.addToJquery($);
     $(document).foundation();
   }

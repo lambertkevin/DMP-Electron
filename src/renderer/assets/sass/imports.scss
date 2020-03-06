@@ -1,10 +1,11 @@
-@import "node_modules/foundation-sites/_vendor/sassy-lists/stylesheets/functions/purge";
-@import "node_modules/foundation-sites/_vendor/sassy-lists/stylesheets/functions/remove";
-@import "node_modules/foundation-sites/_vendor/sassy-lists/stylesheets/functions/replace";
-@import "node_modules/foundation-sites/_vendor/sassy-lists/stylesheets/functions/to-list";
-@import "node_modules/foundation-sites/_vendor/sassy-lists/stylesheets/helpers/true";
-
 @import 'theme/variables';
 @import 'utils/_mixins';
+
+@import "~foundation-sites/_vendor/sassy-lists/stylesheets/functions/purge";
+@import "~foundation-sites/_vendor/sassy-lists/stylesheets/functions/remove";
+@import "~foundation-sites/_vendor/sassy-lists/stylesheets/functions/replace";
+@import "~foundation-sites/_vendor/sassy-lists/stylesheets/functions/to-list";
+@import "~foundation-sites/_vendor/sassy-lists/stylesheets/helpers/true";
+
 @import 'settings';
 @import 'foundation';

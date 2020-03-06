@@ -6,10 +6,11 @@ const path = require('path')
 const { dependencies } = require('../package.json')
 const webpack = require('webpack')
 
-const BabiliWebpackPlugin = require('babili-webpack-plugin')
+const MinifyPlugin = require("babel-minify-webpack-plugin")
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 
 /**
  * List of node_modules to include in webpack bundle
@@ -18,19 +19,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
  * that provide pure *.vue files that need compiling
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/webpack-configurations.html#white-listing-externals
  */
-let whiteListedModules = ['vue', 'foundation-sites'];
+let whiteListedModules = ['vue']
 
-const scssOptions = {
+const sassOptions = {
   includePaths: [
     path.resolve('node_modules', 'foundation-sites', 'scss'),
     path.resolve('node_modules', 'foundation-sites', '_vendor', 'sassy-lists', 'stylesheets', 'functions')
   ],
   data: `
-  @import "src/renderer/assets/sass/imports.scss";
+  @import "./src/renderer/assets/sass/imports.scss";
   `
 };
 
-const rendererConfig = {
+let rendererConfig = {
   devtool: '#cheap-module-eval-source-map',
   entry: {
     renderer: path.join(__dirname, '../src/renderer/main.js')
@@ -52,11 +53,37 @@ const rendererConfig = {
         }
       },
       {
+        test: /\.scss$/,
+        use: [
+          'vue-style-loader', 
+          'css-loader', 
+          {
+            loader: 'sass-loader',
+            options: sassOptions
+          }
+        ]
+      },
+      {
+        test: /\.sass$/,
+        use: [
+          'vue-style-loader', 
+          'css-loader', 
+          {
+            loader: 'sass-loader',
+            options: {
+              indentedSyntax: true,
+              ...sassOptions
+            }
+          }
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: ['vue-style-loader', 'css-loader', 'less-loader']
+      },
+      {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader'
-        })
+        use: ['vue-style-loader', 'css-loader']
       },
       {
         test: /\.html$/,
@@ -76,43 +103,28 @@ const rendererConfig = {
         use: {
           loader: 'vue-loader',
           options: {
-            extractCSS: true,
-            postcss: [
-              require('postcss-cssnext')(),
-              require('precss')()
-            ],
+            extractCSS: process.env.NODE_ENV === 'production',
             loaders: {
               sass: [
                 'vue-style-loader', 
-                {
-                  loader: 'css-loader',
-                  options: {
-                      minimize: false,
-                      sourceMap: true
-                  }
-                }, 
+                'css-loader', 
                 {
                   loader: 'sass-loader',
                   options: {
-                      indentedSyntax: true,
-                      sourceMap: true
+                    indentedSyntax: true,
+                    ...sassOptions
                   }
                 }
               ],
               scss: [
                 'vue-style-loader', 
-                {
-                  loader: 'css-loader',
-                  options: {
-                      minimize: false,
-                      sourceMap: true
-                  }
-                }, 
+                'css-loader', 
                 {
                   loader: 'sass-loader',
-                  options: scssOptions
+                  options: sassOptions
                 }
-              ]
+              ],
+              less: 'vue-style-loader!css-loader!less-loader'
             }
           }
         }
@@ -152,7 +164,8 @@ const rendererConfig = {
     __filename: process.env.NODE_ENV !== 'production'
   },
   plugins: [
-    new ExtractTextPlugin('styles.css'),
+    new VueLoaderPlugin(),
+    new MiniCssExtractPlugin({filename: 'styles.css'}),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.ejs'),
@@ -201,7 +214,7 @@ if (process.env.NODE_ENV === 'production') {
   rendererConfig.devtool = ''
 
   rendererConfig.plugins.push(
-    new BabiliWebpackPlugin(),
+    new MinifyPlugin(),
     new CopyWebpackPlugin([
       {
         from: path.join(__dirname, '../static'),

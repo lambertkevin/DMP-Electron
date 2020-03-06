@@ -18,8 +18,7 @@ module.exports = {
     }],
     'comma-dangle': ['error', 'never'],
     'no-multi-spaces': 0,
-    "no-param-reassign": ['error', { 
-      "props": false
-    }]
+    'max-len': ['warn', 150],
+    'no-console': process.env.NODE_ENV === 'production' ? 2 : 0,
   }
 }
