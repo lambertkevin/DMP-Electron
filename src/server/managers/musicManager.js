@@ -199,7 +199,6 @@ export default {
         progress.songsTreated += 1;
         event.sender.send('progress-update', progress);
         log.warn(songBpm, songUuid, song.uuid, song.name);
-        console.log(songBpm, songUuid, song.uuid, song.name);
 
         musicTypesNames.forEach((type) => {
           const { bpms } = musicTypes[roundType][type];
