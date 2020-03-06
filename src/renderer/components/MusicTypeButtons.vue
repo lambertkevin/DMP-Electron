@@ -4,7 +4,7 @@
       v-for="(type, index) in typePossibilities"
       :key="index"
       class="button"
-      @click="setMusicForSong(type, song)"
+      @click="setTypeForSong(type, song)"
     >
       {{ type }}
     </a>
@@ -54,7 +54,7 @@ export default {
        * @param {Object} song
        * @return {void}
        */
-    setMusicForSong(type, song) {
+    setTypeForSong(type, song) {
       const updateSong = (res) => {
         if (res.code === 200) {
           this.$store.commit('timetable/setSongType', {
@@ -73,7 +73,7 @@ export default {
 
       if (!process.env.IS_WEB) {
         this.$electron.ipcRenderer.send('edit-song', {
-          songPath: song.path,
+          song,
           type
         });
         this.$electron.ipcRenderer.on('edit-song-response', (event, res) => {
@@ -81,7 +81,7 @@ export default {
         });
       } else {
         this.$socket.emit('edit-song', {
-          songPath: song.path,
+          song,
           type
         });
         this.$socket.on('edit-song-response', (res) => {

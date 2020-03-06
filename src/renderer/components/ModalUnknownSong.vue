@@ -44,6 +44,7 @@
                   }"
                 >
                   <div class="grid-x align-center full-height">
+                    <div class="modal-unkown-song__song-name cell small-16 text-center" v-html="song.name.trim()" />
                     <div class="modal-unknown-song__player cell small-16">
                       <audio
                         :src="getPath(song)"
@@ -102,10 +103,10 @@ export default {
   methods: {
 
     /**
-         * Modify the path to make it possible to open in Electron bundle
-         *
-         * @return {void}
-         */
+     * Modify the path to make it possible to open in Electron bundle
+     *
+     * @return {void}
+     */
     getPath(song) {
       if (!process.env.IS_WEB) {
         return song.path ? `file://${song.path}` : null;
@@ -114,10 +115,10 @@ export default {
     },
 
     /**
-         * Get the unknown songs
-         *
-         * @return {void}
-         */
+     * Get the unknown songs
+     *
+     * @return {void}
+     */
     setSongs() {
       const unknownSongs = this.$store.getters['timetable/getUnknownSongs'];
       this.$store.commit('settings/setIsLookingForUnknownSongs', true);
@@ -125,11 +126,11 @@ export default {
     },
 
     /**
-         * Modify the path to make it readable from Electron build
-         *
-         * @param {Object} song
-         * @return {void}
-         */
+     * Modify the path to make it readable from Electron build
+     *
+     * @param {Object} song
+     * @return {void}
+     */
     path(song) {
       return song.path ? `file://${song.path}` : null;
     }
@@ -138,10 +139,10 @@ export default {
   watch: {
 
     /**
-         * Watch changes of isOpen to get the unknown songs
-         *
-         * @return {void}
-         */
+     * Watch changes of isOpen to get the unknown songs
+     *
+     * @return {void}
+     */
     isOpen(isOpenState) {
       if (isOpenState) {
         this.setSongs();
@@ -149,10 +150,10 @@ export default {
     },
 
     /**
-         * Watch changes of songs to close when all songs has been recognized
-         *
-         * @return {void}
-         */
+     * Watch changes of songs to close when all songs has been recognized
+     *
+     * @return {void}
+     */
     songs(songsState) {
       if (!songsState.length) {
         this.isOpen = false;
@@ -162,10 +163,10 @@ export default {
 
 
   /**
-       * Lifecyle
-       *
-       * @return {void}
-       */
+   * Lifecyle
+   *
+   * @return {void}
+   */
   mounted() {
     if (this.isOpen) {
       this.setSongs();
@@ -207,7 +208,7 @@ export default {
       position: relative;
 
       &__slides{
-        z-index: 2;
+        z-index: 2!important;
       }
 
       &__controls{
