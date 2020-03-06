@@ -1,23 +1,24 @@
 <template>
   <td
     v-if="catName !== 'unknown'"
-    class="playlist-table__round__songs"
+    class="playlist-table__round__song"
   >
     <div
       v-for="song in songs"
       :key="song.uuid"
-      class="playlist-table__round__songs__row"
+      class="playlist-table__round__song__row"
     >
       <div
-        class="playlist-table__round__songs__song text-center"
+        class="playlist-table__round__song__music text-center"
         :class="{
-          'playlist-table__round__songs__song--done': song.isDone,
-          'playlist-table__round__songs__song--pending': songPlaying.uuid === song.uuid && !song.isDone && isPlaying
+          'playlist-table__round__song__music--edit': isCorrecting,
+          'playlist-table__round__song__music--done': song.isDone,
+          'playlist-table__round__song__music--pending': songPlaying.uuid === song.uuid && !song.isDone && isPlaying
         }"
       >
         <span
           v-if="getLinkTitle(song)"
-          @click="launchMusic(song)"
+          @click="isCorrecting ? editSong(song) : launchMusic(song)"
         >
           {{ getLinkTitle(song) }}
           <span uk-icon="icon: play-circle;"></span>
@@ -57,6 +58,11 @@ export default {
       }])
     },
 
+    round: {
+      type: Object,
+      required: true
+    },
+
     catName: {
       type: String,
       required: true,
@@ -67,31 +73,40 @@ export default {
   computed: {
     ...mapState('musicPlayer', {
       songPlaying: state => state.dance,
-      isPlaying: state => state.isPlaying
+      isPlaying: state => state.isPlaying,
+    }),
+    ...mapState('settings', {
+      isCorrecting: state => state.isCorrecting
     })
   },
 
   methods: {
 
     /**
-       * Get the name of the dance type to make it the title of the cell
-       *
-       * @param {Object}
-       * @return {String|Boolean}
-       */
+     * Get the name of the dance type to make it the title of the cell
+     *
+     * @param {Object}
+     * @return {String|Boolean}
+     */
     getLinkTitle(song) {
       return _.get(song, ['types', 0, 'type']);
     },
 
     /**
-       * Launch the given music
-       *
-       * @param {Object}
-       * @return {void}
-       */
+     * Launch the given music
+     *
+     * @param {Object}
+     * @return {void}
+     */
     launchMusic(dance) {
       this.$store.commit('musicPlayer/setDance', dance);
-    }
+    },
+
+
+    editSong(song) {
+      this.$store.commit('timetable/setUnknownSongs', [{...song, round: this.round}]);
+      this.$store.commit('settings/setIsLookingForUnknownSongs', true);
+    },
   }
 };
 </script>
@@ -101,7 +116,7 @@ export default {
 /**
  * SMALL UP
  */
-.playlist-table__round__songs {
+.playlist-table__round__song {
   width: 15%;
   padding: 0!important;
 
@@ -112,7 +127,7 @@ export default {
     border-top: 1px dashed rgba($details, 0.7);
   }
 
-  &__song {
+  &__music {
     padding: rem-calc(8)!important;
     width: 100%;
 
@@ -178,6 +193,12 @@ export default {
             stroke: $color;
           }
         }
+      }
+    }
+
+    &--edit {
+      > span {
+        box-shadow: 0 0 0 2px $green inset;
       }
     }
   }

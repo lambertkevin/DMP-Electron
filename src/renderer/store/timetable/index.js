@@ -72,11 +72,8 @@ export default {
       const roundState = state.rounds.find(_round => _round.id === round.id);
       const songState = roundState.dances.find(_song => _song.uuid === song.uuid);
 
-      console.log(song.uuid);
-
       // Vue.set to add reactivy for the watchers
       Vue.set(songState, 'types', [{ type, probability: 100 }]);
-      console.log(songState);
     },
 
     setUnknownSongs(state, payload) {

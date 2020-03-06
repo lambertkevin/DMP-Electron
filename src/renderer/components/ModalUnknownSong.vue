@@ -94,8 +94,8 @@ export default {
         return this.$store.state.settings.isLookingForUnknownSongs;
       },
 
-      set(isOpenState) {
-        this.$store.commit('settings/setIsLookingForUnknownSongs', isOpenState);
+      set(isOpen) {
+        this.$store.commit('settings/setIsLookingForUnknownSongs', isOpen);
       }
     }
   },
@@ -115,17 +115,6 @@ export default {
     },
 
     /**
-     * Get the unknown songs
-     *
-     * @return {void}
-     */
-    setSongs() {
-      const unknownSongs = this.$store.getters['timetable/getUnknownSongs'];
-      this.$store.commit('settings/setIsLookingForUnknownSongs', true);
-      this.$store.commit('timetable/setUnknownSongs', unknownSongs);
-    },
-
-    /**
      * Modify the path to make it readable from Electron build
      *
      * @param {Object} song
@@ -137,17 +126,6 @@ export default {
   },
 
   watch: {
-
-    /**
-     * Watch changes of isOpen to get the unknown songs
-     *
-     * @return {void}
-     */
-    isOpen(isOpenState) {
-      if (isOpenState) {
-        this.setSongs();
-      }
-    },
 
     /**
      * Watch changes of songs to close when all songs has been recognized
@@ -212,11 +190,12 @@ export default {
       }
 
       &__controls{
-        width: 118%;
+        width: 100%;
         position: absolute;
         z-index: 1;
-        left: -9%;
+        left: 0%;
         height: 100%;
+        transform: scale(1.5);
       }
     }
 

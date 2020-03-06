@@ -96,6 +96,17 @@
             </span>
           </span>
         </div>
+        <div>
+          <span
+            class="button"
+            @click="correctSong"
+          >
+            <span uk-icon="icon: pencil; ratio: 0.5"></span>
+            <span class="button__text">
+              Correct a song
+            </span>
+          </span>
+        </div>
         <br />
         <div>
           <div class="settings__panel__content__radio">
@@ -148,6 +159,15 @@ export default {
       },
       set(val) {
         this.$store.commit('settings/setIsOpen', val);
+      }
+    },
+
+    isCorrecting: {
+      get() {
+        return this.$store.state.settings.isCorrecting;
+      },
+      set(val) {
+        this.$store.commit('settings/setIsCorrecting', val);
       }
     },
 
@@ -266,6 +286,14 @@ export default {
         const childProcess = require('child_process');
         childProcess.exec(`open ${this.localPath}`);
       }
+    },
+
+    /**
+     *
+     */
+    correctSong() {
+      this.isCorrecting = !this.isCorrecting;
+      this.isOpen = false;
     }
   }
 };

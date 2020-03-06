@@ -5,6 +5,7 @@ export default {
     isLookingForUnknownSongs: false,
     isOpen: false,
     isHover: false,
+    isCorrecting: false,
     musicTypes: {},
     clashes: 2,
     localPath: ''
@@ -17,6 +18,10 @@ export default {
 
     setIsHover(state, payload) {
       state.isHover = payload;
+    },
+
+    setIsCorrecting(state, payload) {
+      state.isCorrecting = payload;
     },
 
     setIsLookingForUnknownSongs(state, payload) {
