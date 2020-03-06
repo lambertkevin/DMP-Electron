@@ -212,11 +212,11 @@ export default {
     },
 
     /**
-       * Determine if there is songs that need to be recognized
-       * because name and bpm failed
-       *
-       * @return {void}
-       */
+     * Determine if there is songs that need to be recognized
+     * because name and bpm failed
+     *
+     * @return {void}
+     */
     checkForUnkownSongs() {
       const unknownSongs = this.$store.getters['timetable/getUnknownSongs'];
       this.$store.commit('settings/setIsLookingForUnknownSongs', unknownSongs.length >= 1);

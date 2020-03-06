@@ -28,12 +28,12 @@
           {{ longType }}
         </span>
       </td>
-      <playlist-table-songs
-        v-for="(cat, index) in dances"
+      <playlist-table-song
+        v-for="(songs, index) in dances"
         :key="index"
-        :cat="cat"
+        :songs="songs"
         :cat-name="index"
-      ></playlist-table-songs>
+      ></playlist-table-song>
       <td class="playlist-table__row__done">
         <div class="pretty p-svg p-jelly">
           <input
@@ -54,14 +54,15 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import { mapState } from 'vuex';
-import PlaylistTableSongs from '@/components/PlaylistTableSongs';
+import PlaylistTableSong from '@/components/PlaylistTableSong';
 
 export default {
   name: 'PlaylistTablerow',
 
   components: {
-    PlaylistTableSongs
+    PlaylistTableSong
   },
 
   props: {
@@ -92,7 +93,12 @@ export default {
     },
 
     hasUnknownSongs() {
-      return this.row.dances.some(song => song.meta[0].type === 'unknown');
+      const dances = _.get(this.row, ['dances'], []);
+
+      return dances.some(song => {
+        const type = _.get(song, ['types', 0, 'type']);
+        return type === 'unknown'
+      });
     },
 
     isDone: {
@@ -147,11 +153,11 @@ export default {
     organizeDances(dancesToOrganize, danceType) {
       const musicTypes = this.musicTypes[danceType];
       const musicTypesKeys = Object.keys(musicTypes);
-      const unknownDances = dancesToOrganize.filter(dance => dance.meta[0].type === 'unknown');
+      const unknownDances = dancesToOrganize.filter(dance => dance.types[0].type === 'unknown');
       const dances = {};
 
       musicTypesKeys.forEach((musicType) => {
-        const correspondingDance = dancesToOrganize.filter(dance => dance.meta[0].type === musicType);
+        const correspondingDance = dancesToOrganize.filter(dance => dance.types[0].type === musicType);
         const fakeSong = [{}];
 
         dances[musicType] = Object.keys(correspondingDance).length ? correspondingDance : fakeSong;
@@ -160,7 +166,7 @@ export default {
       if (unknownDances.length) {
         return {
           ...dances,
-          unknown: dancesToOrganize.filter(dance => dance.meta[0].type === 'unknown')
+          unknown: dancesToOrganize.filter(dance => dance.types[0].type === 'unknown')
         };
       }
 

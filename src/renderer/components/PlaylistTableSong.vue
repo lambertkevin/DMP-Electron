@@ -4,8 +4,8 @@
     class="playlist-table__round__songs"
   >
     <div
-      v-for="(song, index) in cat"
-      :key="index"
+      v-for="song in songs"
+      :key="song.uuid"
       class="playlist-table__round__songs__row"
     >
       <div
@@ -33,13 +33,14 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import { mapState } from 'vuex';
 
 export default {
-  name: 'PlaylistTableSongs',
+  name: 'PlaylistTableSong',
 
   props: {
-    cat: {
+    songs: {
       type: Array,
       required: true,
       default: () => ([{
@@ -47,7 +48,7 @@ export default {
         name: '??',
         path: '??',
         isDone: false,
-        meta: [
+        types: [
           {
             type: '??',
             probability: 1
@@ -56,7 +57,7 @@ export default {
       }])
     },
 
-    'cat-name': {
+    catName: {
       type: String,
       required: true,
       default: 'test'
@@ -79,10 +80,7 @@ export default {
        * @return {String|Boolean}
        */
     getLinkTitle(song) {
-      if (Object.prototype.hasOwnProperty.call(song, 'meta') && song.meta.length) {
-        return song.meta[0].type;
-      }
-      return false;
+      return _.get(song, ['types', 0, 'type']);
     },
 
     /**
