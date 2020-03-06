@@ -392,7 +392,7 @@ export default {
             text-align: center;
             font-size: rem-calc(8);
             border: 1px solid rgba(smart-scale($black, 15%), 0.15);
-            margin: 0;
+            margin: 0!important;
             border-radius: rem-calc(2);
             transition: all 0.3s ease;
 
