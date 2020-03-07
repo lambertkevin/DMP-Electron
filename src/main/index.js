@@ -1,5 +1,7 @@
-import { app, BrowserWindow } from 'electron' // eslint-disable-line
-import server from './ipc';
+process.env.FFMPEG_PATH = require('ffmpeg-static');
+
+const { app, BrowserWindow } = require('electron') // eslint-disable-line
+const server = require('./ipc').default;
 
 /**
  * Set `__static` path to static files in production
