@@ -103,7 +103,7 @@
           >
             <span uk-icon="icon: pencil; ratio: 0.66"></span>
             <span class="button__text">
-              Correct a song
+              {{ isCorrecting ? 'Stop correction' : 'Correct a song' }}
             </span>
           </span>
         </div>
