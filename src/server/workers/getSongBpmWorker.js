@@ -17,8 +17,6 @@ const songUuid = process.argv[2];
 const songPath = process.argv[3];
 const context = new AudioContext();
 
-console.log(songPath);
-
 context.decodeAudioData(fs.readFileSync(songPath), (buffer) => {
   let audioData = [];
   // Take the average of the two channels

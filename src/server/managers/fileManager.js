@@ -124,16 +124,10 @@ export default {
 
     return songsArrayPromise
       .then(songsArray =>
-        songsArray.map((songs, index) => {
-          if (!songs.length) {
-            console.log(songs);
-          }
-
-          return {
-            ...roundsArray[index],
-            dances: songs.length ? songs.sort((a, b) => dancesOrder[a.types[0].type] - dancesOrder[b.types[0].type]) : []
-          };
-        }))
+        songsArray.map((songs, index) => ({
+          ...roundsArray[index],
+          dances: songs.length ? songs.sort((a, b) => dancesOrder[a.types[0].type] - dancesOrder[b.types[0].type]) : []
+        })))
       .catch(err => console.error(err));
   },
 

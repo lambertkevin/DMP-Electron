@@ -50,12 +50,12 @@ export default {
     try {
       metadata = await metadataApi.get(_song);
     } catch (e) {
+      console.error(e);
       metadata = {};
     }
 
 
     const song = { uuid: uuidv4(), ..._song, metadata };
-
     if (song.metadata.comment === 'dmp' && Object.keys(musicTypes[roundType]).includes(song.metadata.genre)) {
       return {
         ...song,
