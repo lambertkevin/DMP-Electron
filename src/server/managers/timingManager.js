@@ -41,16 +41,14 @@ export default {
   },
 
   getFolderName(parsedTimingRow) {
-    const rowEntries = Object.keys(parsedTimingRow);
+    const rowEntries = Object.entries(parsedTimingRow);
 
-    const nameArray = rowEntries.map((rowEntry) => {
-      const rowValue = parsedTimingRow[rowEntry];
-
+    const nameArray = rowEntries.map(([rowName, rowValue]) => {
       if (!rowValue) {
         return false;
       }
 
-      switch (rowEntry) {
+      switch (rowName) {
         case 'time': {
           const time = moment(rowValue, 'hh:mm:ss');
           return time.isValid() ? time.format('HH[h]mm') : false;
@@ -59,7 +57,7 @@ export default {
           return rowValue.replace(/[\s]?[/][\s]?/g, ' & ');
         }
         case 'heats': {
-          return typeof rowValue === 'number' ? false : `${rowValue}H`;
+          return `${rowValue}H`;
         }
         case 'round': {
           const lcRound = rowValue.toLowerCase();
