@@ -144,11 +144,11 @@ export default {
     const roundMetas = name.split('-');
 
     return {
-      time: roundMetas[0].trim(),
-      category: roundMetas[1].trim(),
-      round: roundMetas[2].trim(),
-      heats: roundMetas[3].trim(),
-      type: roundMetas[4].trim()
+      time: roundMetas[0]?.trim(),
+      category: roundMetas[1]?.trim(),
+      round: roundMetas[2]?.trim(),
+      heats: roundMetas[3]?.trim(),
+      type: roundMetas[4]?.trim()
     };
   },
 
